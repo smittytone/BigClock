@@ -26,7 +26,17 @@ BigClock makes use of the following components:
 1. Insert the CR1225 into the DeadOn
 1. Add the above components to the breadboard using the following circuit:
 
-![Circuit]()
+![Circuit](c1.png)
+
+The lower green and yellow wires are I&sup2;C &mdash; data and clock, respectively.
+
+The orange wire provides the 5V (VIN) that the display requires, though its I&sup2;C pins run at 3V3 &mdash; hence the red connection to the imp breakout’s 3V3 pin.
+
+Breakout pins 1, 2, 5 and 7 connect to the RTC via SPI.
+
+The imp001 breakout board is mounted on top of some some of the wiring. The picture below shows the wiring with the breakout board removed:
+
+![Circuit](c2.png)
 
 When BigClock first runs, it takes the current time from the imp001 (itself set from the Electric Imp server) and programs this value into the DeadOn RTC. BigClock subsequently takes its time from the DeadOn, unless a reset is performed, in which case the DeadOn is reprogrammed from the imp001’s clock.
 
