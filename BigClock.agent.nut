@@ -16,8 +16,8 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
         <link href='//fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
         <link href='//fonts.googleapis.com/css?family=Monofett' rel='stylesheet'>
         <link href='//fonts.googleapis.com/css?family=Questrial' rel='stylesheet'>
-        <link rel='apple-touch-icon' href='https://smittytone.github.io/images/ati-clock.png'>
-        <link rel='shortcut icon' href='https://smittytone.github.io/images/ico-clock.ico' />
+        <link rel='apple-touch-icon' href='https://smittytone.github.io/images/ati-bclock.png'>
+        <link rel='shortcut icon' href='https://smittytone.github.io/images/ico-bclock.ico' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <style>
             .center { margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto; }
@@ -82,7 +82,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                         <td width='20%%'>&nbsp;</td>
                     </tr>
                 </table>
-                <p class='text-center'>&nbsp;<br><small>Big Clock copyright &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/rassilon.png' width='32' height='32'></a></p>
+                <p class='text-center'>&nbsp;<br><small>Big Clock copyright &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
             </div>
         </div>
 
