@@ -17,6 +17,7 @@ BigClock makes use of the following components:
 - Connector wiring
     - female-to-male wires for the display
     - male-to-maile wires for general wiring
+- iPhone 5c retail packaging
 
 ### Assembly Instructions
 
