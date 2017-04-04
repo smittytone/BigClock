@@ -13,9 +13,9 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
     <head>
         <title>Big Clock</title>
         <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-        <link href='//fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
-        <link href='//fonts.googleapis.com/css?family=Monofett' rel='stylesheet'>
-        <link href='//fonts.googleapis.com/css?family=Questrial' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Monofett' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet'>
         <link rel='apple-touch-icon' href='https://smittytone.github.io/images/ati-bclock.png'>
         <link rel='shortcut icon' href='https://smittytone.github.io/images/ico-bclock.ico' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
