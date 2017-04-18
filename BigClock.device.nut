@@ -5,7 +5,7 @@
 
 #import "ds3234rtc.class.nut"
 
-#import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"
+#import "ht16k33segmentbig.class.nut"
 
 // Set the disconnection behaviour
 server.setsendtimeoutpolicy(RETURN_ON_ERROR, WAIT_TIL_SENT, 10);

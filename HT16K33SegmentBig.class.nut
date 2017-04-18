@@ -1,3 +1,4 @@
+// CONSTANTS
 // HT16K33 registers and HT16K33-specific variables
 const HT16K33_REGISTER_DISPLAY_ON  = "\x81";
 const HT16K33_REGISTER_DISPLAY_OFF = "\x80";
@@ -18,8 +19,6 @@ class HT16K33SegmentBig {
     // based on the Holtek HT16K33 controller.
     // The LED communicates over any imp I2C bus.
     // Written by Tony Smith (smittytone) 2014-17
-    // Copyright Electric Imp, Inc. 2014-2017.
-    // https://electricimp.com/
     // Licence: MIT
 
     static VERSION = "1.2.0";
@@ -37,9 +36,8 @@ class HT16K33SegmentBig {
         //   2. The HT16K33's 7-bit I2C address (default: 0x70)
         //   3. Boolean to invoke extra debug log information (default: false)
 
-        if (i2cBus == null || i2cAddress == 0) {
-            throw "HT16K33SegmentBig requires a valid imp I2C object and non-zero I2C address";
-        }
+        if (i2cBus == null || i2cAddress == 0) throw "HT16K33SegmentBig() requires a valid imp I2C object and non-zero I2C address";
+        if (i2cAddress < 0x00 || i2cAddress > 0xFF) throw "HT16K33SegmentBig() requires a valid I2C address";
 
         _led = i2cBus;
         _ledAddress = i2cAddress << 1;
@@ -60,8 +58,6 @@ class HT16K33SegmentBig {
             0x5F, 0x7C, 0x58, 0x5E, 0x7B, 0x71,                          // A - F
             0x00, 0x40                                                   // space, minus sign
         ];
-
-        init();
     }
 
     function init(character = 16, brightness = 15) {
@@ -122,7 +118,6 @@ class HT16K33SegmentBig {
         //      0x10 - decimal point (upper)
         // Returns:
         //   this
-
         if (colonPattern < 0 || colonPattern > 0x1E) {
             server.error("HT16K33SegmentBig.setColon() passed out-of-range colon pattern");
             return this;
@@ -155,7 +150,6 @@ class HT16K33SegmentBig {
         //
         // Returns:
         //   this
-
         if (pattern < 0 || pattern > 127) {
             server.error("HT16K33SegmentBig.writeGlyph() passed out-of-range character value (0-127)");
             return this;
@@ -177,7 +171,6 @@ class HT16K33SegmentBig {
         //   2. The number to be displayed (0 - 15 for '0' - 'F')
         // Returns:
         //   this
-
         if (digit < 0 || digit > LED_MAX_ROWS || digit == 2) {
             server.error("HT16K33SegmentBig.writeNumber() passed out-of-range digit number (0-1, 3-4)");
             return this;
@@ -196,7 +189,6 @@ class HT16K33SegmentBig {
         // Set the LED brightness
         // Parameters:
         //   1. Integer specifying the brightness (0 - 15; default 15)
-
         if (brightness > 15) {
             if (_debug) server.log("HT16K33SegmentBig.setBrightness() passed out-of-range brightness value (0-15)");
             brightness = 15;
@@ -219,7 +211,6 @@ class HT16K33SegmentBig {
         //    1. Flash rate in Herz. Must be 0.5, 1 or 2 for a flash, or 0 for no flash
         // Returns:
         //    Nothing
-
         local values = [0, 2, 1, 0.5];
         local match = -1;
         foreach (i, value in values) {
