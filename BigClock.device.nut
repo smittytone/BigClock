@@ -23,6 +23,7 @@ const TICK_DURATION = 0.5;
 const TICK_TOTAL = 4;
 const HALF_TICK_TOTAL = 2;
 const DIS_TIMEOUT = 60;
+const SYNC_TIME = 15;
 
 // GLOBALS
 
@@ -84,13 +85,13 @@ function displayTime() {
         return;
     }
 
+    clock.clearBuffer();
+
     // Set the defaults to the 24-hour reading -
     // We will alter these values if the clock
     // is set to a 12-hour am/pm display
-    clock.clearBuffer();
-    local colonValue = 0x00;
-
     // Note 'hour' already adjusted for BST
+    local colonValue = 0x00;
     local a = hour;
     local b = 0;
 
@@ -124,23 +125,14 @@ function displayTime() {
         }
 
         // Set AM/PM
-        if (a < 12) {
-            colonValue = 0x08;
-        } else {
-            colonValue = 0x04;
-        }
+        colonValue = (a < 12) ? 0x08 : 0x04;
     }
 
     // Minutes
     if (minutes > 9) {
-        a = minutes;
-        while (a >= 0) {
-            a = a - 10;
-            ++b;
-        }
-
-        clock.writeNumber(4, (minutes - (10 * (b - 1))));
-        clock.writeNumber(3, b - 1);
+        a = (minutes / 10).tointeger();
+        clock.writeNumber(4, (minutes - (10 * a)));
+        clock.writeNumber(3, a);
     } else {
         clock.writeNumber(4, minutes);
         clock.writeNumber(3, 0);
@@ -164,10 +156,8 @@ function displayTime() {
 
 function syncText() {
     // Display the word 'SYNC' on the LED
-    // Note that we handle the colon here rather than set it via the library
     if (!settings.on) return;
     local letters = [0x6D, 0x6E, 0x00, 0x37, 0x39];
-
     foreach (index, character in letters) {
         if (index != 2) clock.writeGlyph(index, character);
     }
@@ -178,8 +168,7 @@ function syncText() {
 // PREFERENCES FUNCTIONS
 
 function setInitialTime(firstTime) {
-    // Use the next line only with no battery installed!!!
-    // firstTime = true
+    // Set the RTC using the server time
     if (firstTime) {
         if (debug) server.log("Setting RTC with initial time via server");
         local now = date();
@@ -189,7 +178,7 @@ function setInitialTime(firstTime) {
 
 function setPrefs(prefs) {
     // Cancel the 'Sync' display timer if it has yet to fire
-    if (debug) server.log("Receiving preferences from agent");
+    if (debug) server.log("Received preferences from agent");
     if (syncTimer) imp.cancelwakeup(syncTimer);
     syncTimer = null;
 
@@ -266,7 +255,6 @@ function setColon(value) {
 
 function setLight(value) {
     if (debug) server.log("Setting light " + ((value == 1) ? "on" : "off"));
-
     settings.on = value;
 
     if (value) {
@@ -274,6 +262,11 @@ function setLight(value) {
     } else {
         clock.powerDown();
     }
+}
+
+function setDebug(ds) {
+    debug = ds;
+    server.log("BigClock debug " + ((debug) ? "enabled" : "disabled"));
 }
 
 // OFFLINE OPERATION FUNCTIONS
@@ -304,7 +297,7 @@ function disHandler(reason) {
         disMessage = null;
 
         // Re-acquire the prefs in case they were changed when the clock went offline
-        agent.send("bclock.get.prefs", 1);
+        agent.send("bclock.get.prefs", true);
     }
 }
 
@@ -345,12 +338,11 @@ clock = HT16K33SegmentBig(hardware.i2c89, 0x70, debug);
 clock.init();
 
 // Show the ‘sync’ message then give the text no more than
-// 30 seconds to appear. If the prefs data comes from the
+// SYNC_TIME seconds to appear. If the prefs data comes from the
 // agent before then, the text will automatically be cleared
-// (and the timer cancelled)
 resetSettings();
 syncText();
-syncTimer = imp.wakeup(30.0, getTime);
+syncTimer = imp.wakeup(SYNC_TIME, getTime);
 
 // Set up Agent notification response triggers
 agent.on("bclock.set.prefs", setPrefs);
@@ -362,10 +354,7 @@ agent.on("bclock.set.flash", setFlash);
 agent.on("bclock.set.colon", setColon);
 agent.on("bclock.set.light", setLight);
 agent.on("bclock.first.time", setInitialTime);
-agent.on("bclock.set.debug", function(ds) {
-    if (ds != debug) debug = ds;
-    server.log("BigClock debug " + ((debug) ? "enabled" : "disabled"));
-});
+agent.on("bclock.set.debug", setDebug);
 
 // Get preferences from server
 agent.send("bclock.get.prefs", true);
