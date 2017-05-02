@@ -1,4 +1,4 @@
-# BigClock 2.0
+# BigClock 2.1
 
 An Electric Imp-based wall/desktop clock which incorporates a large segment LED display and an RTC.
 
