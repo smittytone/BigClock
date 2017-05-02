@@ -28,18 +28,21 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
             td {color: #111111; font-family: Questrial}
             hr {border-color: #ee1111}
             .error-message {color: #111111}
+            h4.showhide {cursor: pointer}
         </style>
     </head>
     <body>
         <div class='container' style='padding: 20px;'>
             <div style='border: 2px solid #ee1111' align='center'>
                 <h2 align='center'>Big Clock</h2>
+                <h4 align='center' class='clock-status'><i><span>This Big Clock is online</span></i></h4>
                 <p align='center'>&nbsp;</p>
                 <table width='100%%'>
                     <tr>
                         <td width='20%%'>&nbsp;</td>
                         <td width='60%%'>
-                            <h4>General Settings</h4>
+                            <hr>
+                            <h4 align='center'>General Settings</h4>
                             <div class='mode-checkbox' style='color:#111111;font-family:Questrial'>
                                 <input type='checkbox' name='mode' id='mode' value='mode'> 24-Hour Mode (Switch off for AM/PM)
                             </div>
@@ -61,23 +64,30 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                                 <button type='submit' id='onoff' style='height:32px;width:200px'>Turn off Display</button>
                             </div>
                             <hr>
-                            <div class='utc-controls'>
-                                <h4>World Time</h4>
-                                <div class='utc-checkbox' style='color:#111111;font-family:Questrial'>
-                                    <small><input type='checkbox' name='utc' id='utc' value='utc'> Show World Time</small>
-                                </div>
-                                <div class='utc-slider'>
-                                    <input type='range' name='utcs' id='utcs' value='0' min='0' max='24'>
-                                    <table width='100%%'><tr><td width='30%%' align='left'>-12</td><td width='40%%' align='center'>0</td><td width='30%%' align='right'>+12</td></tr></table>
-                                    <p class='utc-status' align='right'>&nbsp;<br>Offset from local time: <span></span> hours</p>
+                            <h4 align='center'>World Time Settings</h4>
+                            <div class='utc-checkbox' style='color:#111111;font-family:Questrial'>
+                                <small><input type='checkbox' name='utc' id='utc' value='utc'> Show World Time</small>
+                            </div>
+                            <div class='utc-slider'>
+                                <input type='range' name='utcs' id='utcs' value='0' min='0' max='24'>
+                                <table width='100%%'><tr><td width='30%%' align='left'>-12</td><td width='40%%' align='center'>0</td><td width='30%%' align='right'>+12</td></tr></table>
+                                <p class='utc-status' align='right'>&nbsp;<br>Offset from local time: <span></span> hours</p>
+                            </div>
+                            <hr>
+                            <div class='advancedsettings'>
+                                <h4 class='showhide' align='center'>Click for Advanced Settings</h4>
+                                <div class='advanced' align='center'>
+                                    <br>
+                                    <div class='reset-button' style='color:#111111;font-family:Rubik;weight:bold' align='center'>
+                                        <button type='submit' id='reset' style='height:28px;width:200px'>Reset Big Clock</button>
+                                    </div>
+                                    <br>
+                                    <div class='debug-checkbox' style='font-family:Questrial'>
+                                        <input type='checkbox' name='debug' id='debug' value='debug'> Debug Mode
+                                    </div>
                                 </div>
                             </div>
                             <hr>
-                            <h4 align='center' class='clock-status'><i><span>This Big Clock is online</span></i></h4>
-                            <hr>
-                            <div class='reset-button' style='color:#111111;font-family:Rubik;weight:bold' align='center'>
-                                <button type='submit' id='reset' style='height:28px;width:200px'>Reset Big Clock</button>
-                            </div>
                         </td>
                         <td width='20%%'>&nbsp;</td>
                     </tr>
@@ -88,220 +98,227 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
 
         <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
         <script>
-          // Variables
-          var agenturl = '%s';
-          var displayon = true;
-          var stateflag = false;
+            $('.advanced').hide();
 
-          // Get initial readings
-          getState(updateReadout);
+            // Variables
+            var agenturl = '%s';
+            var displayon = true;
+            var stateflag = false;
 
-          // Set UI click actions: Checkboxes
-          $('#mode').click(setmode);
-          $('#bst').click(setbst);
-          $('#seconds').click(setcolon);
-          $('#flash').click(setflash);
-          $('#utc').click(setutc);
-          // $('#debug').click(setdebug);
+            // Get initial readings
+            getState(updateReadout);
 
-          // Buttons
-          $('.reset-button button').click(reset);
-          $('.onoff-button button').click(setlight);
+            // Set UI click actions: Checkboxes
+            $('#mode').click(setmode);
+            $('#bst').click(setbst);
+            $('#seconds').click(setcolon);
+            $('#flash').click(setflash);
+            $('#utc').click(setutc);
+            $('#debug').click(setdebug);
 
-          // Slider
-          var slider = document.getElementById('brightness');
-          slider.addEventListener('mouseup', updateSlider);
-          slider.addEventListener('touchend', updateSlider);
-          $('.brightness-status span').text(slider.value);
-          $('#brightness').css('background', '#eeeeee');
+            // Buttons
+            $('.reset-button button').click(reset);
+            $('.onoff-button button').click(setlight);
 
-          // World Time Slider
-          slider = document.getElementById('utcs');
-          slider.addEventListener('mouseup', updateutc);
-          slider.addEventListener('touchend', updateutc);
-          $('.utc-status span').text(slider.value);
-          $('#utcs').css('background', '#eeeeee');
+            // Slider
+            var slider = document.getElementById('brightness');
+            slider.addEventListener('mouseup', updateSlider);
+            slider.addEventListener('touchend', updateSlider);
+            $('.brightness-status span').text(slider.value);
+            $('#brightness').css('background', '#eeeeee');
 
-          // Functions
-          function updateSlider() {
-            $('.brightness-status span').text($('#brightness').val());
-            setbright();
-          }
+            // World Time Slider
+            slider = document.getElementById('utcs');
+            slider.addEventListener('mouseup', updateutc);
+            slider.addEventListener('touchend', updateutc);
+            $('.utc-status span').text(slider.value);
+            $('#utcs').css('background', '#eeeeee');
 
-          function updateutc() {
-            var u = $('#utcs').val();
-            $('.utc-status span').text(u - 12);
-            if (document.getElementById('utc').checked == true) {
-              setutc();
+            $('.showhide').click(function(){
+                $('.advanced').toggle();
+            });
+
+            // Functions
+            function updateSlider() {
+                $('.brightness-status span').text($('#brightness').val());
+                setbright();
             }
-          }
 
-          function updateReadout(data) {
-            var s = data.split('.');
-            document.getElementById('mode').checked = (s[0] == '1') ? true : false;
-            document.getElementById('bst').checked = (s[1] == '1') ? true : false;
-            document.getElementById('seconds').checked = (s[3] == '1') ? true : false;
-            document.getElementById('flash').checked = (s[2] == '1') ? true : false;
-            document.getElementById('utc').checked = (s[5] == '1') ? true : false;
-
-            var b = parseInt(s[6]);
-            $('.utc-status span').text(b - 12);
-            $('#utcs').val(b);
-
-            $('.onoff-button button').text((s[7] == '1') ? 'Turn off Display' : 'Turn on Display');
-            displayon = (s[7] == '1');
-
-            b = parseInt(s[4]);
-            $('.brightness-status span').text(b);
-            $('#brightness').val(b);
-
-            updateState(s[8]);
-
-            // Auto-reload data in 120 seconds
-            if (!stateflag) {
-              checkState();
-              stateflag = true;
+            function updateutc() {
+                var u = $('#utcs').val();
+                $('.utc-status span').text(u - 12);
+                if (document.getElementById('utc').checked == true) {
+                    setutc();
+                }
             }
-          }
 
-          function updateState(s) {
-             if (s == 'd') {
-               $('.clock-status span').text('This Big Clock is offline');
-             } else {
-               $('.clock-status span').text('This Big Clock is online');
-             }
-          }
+            function updateReadout(data) {
+                var s = data.split('.');
+                document.getElementById('mode').checked = (s[0] == '1') ? true : false;
+                document.getElementById('bst').checked = (s[1] == '1') ? true : false;
+                document.getElementById('seconds').checked = (s[3] == '1') ? true : false;
+                document.getElementById('flash').checked = (s[2] == '1') ? true : false;
+                document.getElementById('utc').checked = (s[5] == '1') ? true : false;
+                document.getElementById('debug').checked = (s[9] == '1') ? true : false;
 
-          function getState(callback) {
-             // Request the current data
-             $.ajax({
-               url : agenturl + '/settings',
-               type: 'GET',
-               success : function(response) {
-                 if (callback) {
-                   callback(response);
-                 }
-               },
-               error : function(xhr, textStatus, error) {
-                 if (error) {
-                   $('.clock-status span').text(error);
-                 }
-               }
-             });
-          }
+                var b = parseInt(s[6]);
+                $('.utc-status span').text(b - 12);
+                $('#utcs').val(b);
 
-          function checkState() {
-            $.ajax({
-               url : agenturl + '/state',
-               type: 'GET',
-               success : function(response) {
-                 updateState(response)
-                 setTimeout(checkState, 120000);
-               },
-               error : function(xhr, textStatus, error) {
-                 if (error) {
-                   $('.clock-status span').text(error);
-                 }
-               }
-             });
-          }
+                $('.onoff-button button').text((s[7] == '1') ? 'Turn off Display' : 'Turn on Display');
+                displayon = (s[7] == '1');
 
-          function setmode() {
-            var d = { 'setmode' : ((document.getElementById('mode').checked == true) ? '1' : '0') };
-            sendstate(d);
-          }
+                b = parseInt(s[4]);
+                $('.brightness-status span').text(b);
+                $('#brightness').val(b);
 
-          function setbst() {
-            var d = { 'setbst' : ((document.getElementById('bst').checked == true) ? '1' : '0') };
-            sendstate(d);
-          }
+                updateState(s[8]);
 
-          function setcolon() {
-            var d = { 'setcolon' : ((document.getElementById('seconds').checked == true) ? '1' : '0') };
-            sendstate(d);
-          }
-
-          function setflash() {
-            var d = { 'setflash' : ((document.getElementById('flash').checked == true) ? '1' : '0') };
-            sendstate(d);
-          }
-
-          function setbright() {
-            var d = { 'setbright' : ($('#brightness').val()) };
-            sendstate(d);
-          }
-
-          function setlight() {
-            displayon = !displayon;
-            $('.onoff-button button').text(displayon ? 'Turn off Display' : 'Turn on Display');
-            var s = (displayon ? '1' : '0');
-            var d = { 'setlight' :  s };
-            sendstate(d);
-          }
-
-          function setutc() {
-            var d = { 'setutc' : ((document.getElementById('utc').checked == true) ? '1' : '0'), 'utcval' : $('#utcs').val() };
-            sendstate(d);
-          }
-
-          function sendstate(data) {
-            $.ajax({
-              url : agenturl + '/settings',
-              type: 'POST',
-              data: JSON.stringify(data),
-              success: function() {
-                getState(updateReadout);
-              },
-              error : function(xhr, textStatus, error) {
-                if (error) {
-                  $('.clock-status span').text(error);
+                // Auto-reload data in 120 seconds
+                if (!stateflag) {
+                    checkState();
+                    stateflag = true;
                 }
-              }
-            });
-          }
+            }
 
-          function reset() {
-            // Trigger a settings reset
-            $.ajax({
-              url : agenturl + '/action',
-              type: 'POST',
-              data: JSON.stringify({ 'action' : 'reset' }),
-              success : function(response) {
-                getState(updateReadout);
-              }
-            });
-          }
-
-          function setdebug() {
-            // Tell the device to enter or leave debug mode
-            $.ajax({
-              url : agenturl + '/action',
-              type: 'POST',
-              data: JSON.stringify({ 'action' : 'debug', 'debug' : document.getElementById('debug').checked }),
-              error : function(xhr, textStatus, error) {
-                if (error) {
-                  $('.clock-status span').text(error);
+            function updateState(s) {
+                if (s == 'd') {
+                    $('.clock-status span').text('This Big Clock is offline');
+                } else {
+                    $('.clock-status span').text('This Big Clock is online');
                 }
-              }
-            });
-          }
+            }
 
-          function reboot() {
-            // Trigger a device restart
-            $.ajax({
-              url : agenturl + '/action',
-              type: 'POST',
-              data: JSON.stringify({ 'action' : 'reboot' }),
-              success : function(response) {
-                getState(updateReadout);
-              },
-              error : function(xhr, textStatus, error) {
-                if (error) {
-                  $('.clock-status span').text(error);
-                }
-              }
-            });
-          }
+            function getState(callback) {
+                // Request the current data
+                $.ajax({
+                    url : agenturl + '/settings',
+                    type: 'GET',
+                    success : function(response) {
+                        if (callback) {
+                            callback(response);
+                        }
+                    },
+                    error : function(xhr, textStatus, error) {
+                        if (error) {
+                            $('.clock-status span').text(error);
+                        }
+                    }
+                });
+            }
+
+            function checkState() {
+                $.ajax({
+                    url : agenturl + '/state',
+                    type: 'GET',
+                    success : function(response) {
+                        updateState(response)
+                        setTimeout(checkState, 120000);
+                    },
+                    error : function(xhr, textStatus, error) {
+                        if (error) {
+                            $('.clock-status span').text(error);
+                        }
+                    }
+                });
+            }
+
+            function setmode() {
+                var d = { 'setmode' : ((document.getElementById('mode').checked == true) ? '1' : '0') };
+                sendstate(d);
+            }
+
+            function setbst() {
+                var d = { 'setbst' : ((document.getElementById('bst').checked == true) ? '1' : '0') };
+                sendstate(d);
+            }
+
+            function setcolon() {
+                var d = { 'setcolon' : ((document.getElementById('seconds').checked == true) ? '1' : '0') };
+                sendstate(d);
+            }
+
+            function setflash() {
+                var d = { 'setflash' : ((document.getElementById('flash').checked == true) ? '1' : '0') };
+                sendstate(d);
+            }
+
+            function setbright() {
+                var d = { 'setbright' : ($('#brightness').val()) };
+                sendstate(d);
+            }
+
+            function setlight() {
+                displayon = !displayon;
+                $('.onoff-button button').text(displayon ? 'Turn off Display' : 'Turn on Display');
+                var s = (displayon ? '1' : '0');
+                var d = { 'setlight' :  s };
+                sendstate(d);
+            }
+
+            function setutc() {
+                var d = { 'setutc' : ((document.getElementById('utc').checked == true) ? '1' : '0'), 'utcval' : $('#utcs').val() };
+                sendstate(d);
+            }
+
+            function sendstate(data) {
+                $.ajax({
+                    url : agenturl + '/settings',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    success: function() {
+                        getState(updateReadout);
+                    },
+                    error : function(xhr, textStatus, error) {
+                        if (error) {
+                            $('.clock-status span').text(error);
+                        }
+                    }
+                });
+            }
+
+            function reset() {
+                // Trigger a settings reset
+                $.ajax({
+                    url : agenturl + '/action',
+                    type: 'POST',
+                    data: JSON.stringify({ 'action' : 'reset' }),
+                    success : function(response) {
+                        getState(updateReadout);
+                    }
+                });
+            }
+
+            function setdebug() {
+                // Tell the device to enter or leave debug mode
+                $.ajax({
+                    url : agenturl + '/action',
+                    type: 'POST',
+                    data: JSON.stringify({ 'action' : 'debug', 'value' : ((document.getElementById('debug').checked == true) ? '1' : '0') }),
+                    error : function(xhr, textStatus, error) {
+                        if (error) {
+                            $('.clock-status span').text(error);
+                        }
+                    }
+                });
+            }
+
+            function reboot() {
+                // Trigger a device restart
+                $.ajax({
+                    url : agenturl + '/action',
+                    type: 'POST',
+                    data: JSON.stringify({ 'action' : 'reboot' }),
+                    success : function(response) {
+                        getState(updateReadout);
+                    },
+                    error : function(xhr, textStatus, error) {
+                        if (error) {
+                            $('.clock-status span').text(error);
+                        }
+                    }
+                });
+            }
         </script>
     </body>
 </html>";
@@ -313,7 +330,7 @@ local settings = {};
 local api = null;
 local firstTime = false;    // USE 'true' TO ZAP THE RTC
 local firstRun = false;     // USE 'true' TO ZAP THE STORED DEFAULTS
-local debug = true;
+local debug = false;
 
 // CLOCK FUNCTIONS
 
@@ -336,7 +353,7 @@ function appResponse() {
     // Responds to the app's request for the clock's set-up data
     // Generates a string in the form:
     //
-    //   1.1.1.1.01.1.01.1.d
+    //   1.1.1.1.01.1.01.1.d.1
     //
     // for the values
     //   0. mode
@@ -348,6 +365,7 @@ function appResponse() {
     //   6. utc offset
     //   7. display state
     //   8. connection status
+    //   9. debug status
     //
     // UTC offset is the value for the app's UI slider, ie. 0 to 24
     // (mapping in device code to offset values of +12 to -12)
@@ -378,7 +396,10 @@ function appResponse() {
 	rs = rs + ((settings.on) ? "1." : "0.");
 
     // Add d to indicate disconnected, or c
-    rs = rs + (device.isconnected() ? "c" : "d");
+    rs = rs + (device.isconnected() ? "c." : "d.");
+
+    // Add debug state
+    rs = rs + (debug ? "1" : "0");
 
     return rs;
 }
@@ -393,7 +414,9 @@ function resetToDefaults() {
     settings.on = true;
     settings.offset = 12;
     settings.brightness = 15;
+    settings.debug = false;
     firstTime = true;
+    debug = false;
 }
 
 // PROGRAM START
@@ -411,6 +434,7 @@ if (firstRun) server.save({});
 //    UTC: true/false for UTC set/unset
 //    OFFSET: 0-24 for GMT offset (subtract 12 for actual value)
 //    BRIGHTNESS: 1 to 15 for boot-set LED brightness
+//    DEBUG: true/false
 
 settings.on <- true;
 settings.mode <- true;
@@ -420,12 +444,21 @@ settings.flash <- true;
 settings.utc <- false;
 settings.offset <- 12;
 settings.brightness <- 15;
+settings.debug <- debug;
 
 local table = server.load();
 
 if (table.len() != 0) {
     // Table is NOT empty so set 'settings' to the loaded table
     settings = table;
+
+    if (!("debug" in settings)) {
+        server.save({});
+        settings.debug <- debug;
+        server.save(settings);
+    } else {
+        debug = settings.debug;
+    }
 } else {
     // Table is empty, so this must be a first run
     if (debug) server.log("First run - performing setup");
@@ -598,14 +631,16 @@ api.post("/action", function(context) {
             }
 
             if (data.action == "debug") {
-                if (data.action.debug == "1") {
+                if (data.value == "1") {
                     debug = true;
-                } else if (data.action.debug == "0") {
+                } else if (data.value == "0") {
                     debug = false;
                 }
 
-                device.send("bclock.set.debug", (debug ? 1 : 0));
+                settings.debug = debug;
+                device.send("bclock.set.debug", debug);
                 server.log("Debug mode " + (debug ? "on" : "off"));
+                if (server.save(settings) != 0) server.error("Could not save clock settings after reset");
             }
         }
 
