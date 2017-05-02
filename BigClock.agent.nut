@@ -474,7 +474,7 @@ api.post("/settings", function(context) {
 
             if (server.save(settings) > 0) server.error("Could not save mode setting");
             if (debug) server.log("Clock mode turned to " + (settings.mode ? "24 hour" : "12 hour"));
-            device.send("bclock.set.mode", (settings.mode ? 24 : 12));
+            device.send("bclock.set.mode", settings.mode);
         }
 
         // Check for a BST set/unset message
@@ -491,7 +491,7 @@ api.post("/settings", function(context) {
 
             if (server.save(settings) > 0) server.error("Could not save BST/GMT setting");
             if (debug) server.log("Clock bst observance turned " + (settings.bst ? "on" : "off"));
-            device.send("bclock.set.bst", (settings.bst ? 1 : 0));
+            device.send("bclock.set.bst", settings.bst);
         }
 
         // Check for a set brightness message
@@ -516,7 +516,7 @@ api.post("/settings", function(context) {
 
             if (server.save(settings) > 0) server.error("Could not save colon flash setting");
             if (debug) server.log("Clock colon flash turned " + (settings.flash ? "on" : "off"));
-            device.send("bclock.set.flash", (settings.flash ? 1 : 0));
+            device.send("bclock.set.flash", settings.flash);
         }
 
         // Check for a set colon show message
@@ -533,7 +533,7 @@ api.post("/settings", function(context) {
 
             if (server.save(settings) > 0) server.error("Could not save colon visibility setting");
             if (debug) server.log("Clock colon turned " + (settings.colon ? "on" : "off"));
-            device.send("bclock.set.colon", (settings.colon ? 1 : 0));
+            device.send("bclock.set.colon", settings.colon);
         }
 
         // Check for set light message
@@ -550,7 +550,7 @@ api.post("/settings", function(context) {
 
             if (server.save(settings) > 0) server.error("Could not save display light setting");
             if (debug) server.log("Clock display turned " + (settings.on ? "on" : "off"));
-            device.send("bclock.set.light", (settings.on ? 1 : 0));
+            device.send("bclock.set.light", settings.on);
         }
 
         if ("setutc" in data) {

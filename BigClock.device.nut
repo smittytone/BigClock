@@ -187,32 +187,32 @@ function setInitialTime(firstTime) {
     }
 }
 
-function setPrefs(prefsTable) {
+function setPrefs(prefs) {
     // Cancel the 'Sync' display timer if it has yet to fire
     if (debug) server.log("Receiving preferences from agent");
     if (syncTimer) imp.cancelwakeup(syncTimer);
     syncTimer = null;
 
     // Parse the set-up data table provided by the agent
-    settings.mode = prefsTable.mode;
-    settings.bst = prefsTable.bst;
-    settings.flash = prefsTable.flash;
-    settings.colon = prefsTable.colon;
-    settings.utc = prefsTable.utc;
-    settings.offset = 12 - prefsTable.offset;
+    settings.mode = prefs.mode;
+    settings.bst = prefs.bst;
+    settings.flash = prefs.flash;
+    settings.colon = prefs.colon;
+    settings.utc = prefs.utc;
+    settings.offset = 12 - prefs.offset;
 
     // Clear the display
-    if (prefsTable.on != settings.on) {
-        setLight(prefsTable.on ? 1 : 0);
-        settings.on = prefsTable.on;
+    if (prefs.on != settings.on) {
+        setLight(prefs.on);
+        settings.on = prefs.on;
     }
 
     // Set the brightness
-    if (prefsTable.brightness != settings.brightness) {
-        settings.brightness = prefsTable.brightness;
+    if (prefs.brightness != settings.brightness) {
+        settings.brightness = prefs.brightness;
 
         // Only set the brightness now if the display is on
-        if (prefsTable.on != 1) clock.setBrightness(settings.brightness);
+        if (prefs.on) clock.setBrightness(settings.brightness);
     }
 
     // Only call getTime() if we have come here *before*
@@ -223,13 +223,13 @@ function setPrefs(prefsTable) {
 function setBST(value) {
     // This function is called when the app sets or unsets BST
     if (debug) server.log("Setting BST auto-monitoring " + ((value == 1) ? "on" : "off"));
-    settings.bst = (value == 1);
+    settings.bst = value;
 }
 
 function setMode(value) {
     // This function is called when 12/24 modes are switched by app
     if (debug) server.log("Setting 24-hour mode " + ((value == 24) ? "on" : "off"));
-    settings.mode = (value == 24 && settings.mode == false);
+    settings.mode = value;
 }
 
 function setUTC(string) {
@@ -255,22 +255,23 @@ function setBright(brightness) {
 function setFlash(value) {
     // This function is called when the app sets or unsets the colon flash
     if (debug) server.log("Setting colon flash " + ((value == 1) ? "on" : "off"));
-    settings.flash = (value == 1);
+    settings.flash = value;
 }
 
 function setColon(value) {
     // This function is called when the app sets or unsets the colon flash
     if (debug) server.log("Setting colon state " + ((value == 1) ? "on" : "off"));
-    settings.colon = (value == 1);
+    settings.colon = value == 1;
 }
 
 function setLight(value) {
     if (debug) server.log("Setting light " + ((value == 1) ? "on" : "off"));
-    if (value == 1) {
-        settings.on = true;
+
+    settings.on = value;
+
+    if (value) {
         clock.powerUp();
     } else {
-        settings.on = false;
         clock.powerDown();
     }
 }
@@ -341,6 +342,7 @@ rtc.init();
 // Set up the display
 hardware.i2c89.configure(CLOCK_SPEED_50_KHZ);
 clock = HT16K33SegmentBig(hardware.i2c89, 0x70, debug);
+clock.init();
 
 // Show the ‘sync’ message then give the text no more than
 // 30 seconds to appear. If the prefs data comes from the
@@ -366,4 +368,4 @@ agent.on("bclock.set.debug", function(ds) {
 });
 
 // Get preferences from server
-agent.send("bclock.get.prefs", 1);
+agent.send("bclock.get.prefs", true);
