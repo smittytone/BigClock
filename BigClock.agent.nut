@@ -6,7 +6,7 @@
 // CONSTANTS
 
 const APP_NAME = "BigClock";
-const APP_VERSION = "2.0";
+const APP_VERSION = "2.1";
 const CHECK_TIME = 43200;
 const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
 <html>
