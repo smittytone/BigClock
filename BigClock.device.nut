@@ -5,7 +5,7 @@
 
 #import "ds3234rtc.class.nut"
 
-#import "ht16k33segmentbig.class.nut"
+#import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"
 
 // Set the disconnection behaviour
 server.setsendtimeoutpolicy(RETURN_ON_ERROR, WAIT_TIL_SENT, 10);
@@ -67,7 +67,14 @@ function getTime() {
 
     // Adjust the hour for BST and midnight rollover
     if (settings.bst && utilities.bstCheck()) hour++;
+
+    // Update for world time
+    if (settings.utc) {
+        hour = hour + settings.offset;
+    }
+
     if (hour > 23) hour = 0;
+    if (hour < 0) hour = hour + 24;
 
     // Update the tick counter
     tickCount++;
@@ -80,11 +87,9 @@ function getTime() {
 }
 
 function displayTime() {
-    if (!settings.on) {
-        clock.clearDisplay();
-        return;
-    }
+    if (!settings.on) return;
 
+    // Clear the display
     clock.clearBuffer();
 
     // Set the defaults to the 24-hour reading -
@@ -188,7 +193,7 @@ function setPrefs(prefs) {
     settings.flash = prefs.flash;
     settings.colon = prefs.colon;
     settings.utc = prefs.utc;
-    settings.offset = 12 - prefs.offset;
+    settings.offset = prefs.offset;
 
     // Clear the display
     if (prefs.on != settings.on) {
@@ -211,24 +216,25 @@ function setPrefs(prefs) {
 
 function setBST(value) {
     // This function is called when the app sets or unsets BST
-    if (debug) server.log("Setting BST auto-monitoring " + ((value == 1) ? "on" : "off"));
+    if (debug) server.log("Setting BST auto-monitoring " + ((value) ? "on" : "off"));
     settings.bst = value;
 }
 
 function setMode(value) {
     // This function is called when 12/24 modes are switched by app
-    if (debug) server.log("Setting 24-hour mode " + ((value == 24) ? "on" : "off"));
+    if (debug) server.log("Setting 24-hour mode " + ((value) ? "on" : "off"));
     settings.mode = value;
 }
 
-function setUTC(string) {
+function setUTC(value) {
     // This function is called when the app sets or unsets UTC
     if (debug) server.log("Setting UTC " + ((string == "N") ? "on" : "off"));
-    if (string == "N") {
+    if (value == "N") {
         settings.utc = false;
     } else {
+        // NOTE 'value' is an integer if it's not "N"
         settings.utc = true;
-        settings.offset = 12 - string.tointeger();
+        settings.offset = value;
     }
 }
 
@@ -243,18 +249,18 @@ function setBright(brightness) {
 
 function setFlash(value) {
     // This function is called when the app sets or unsets the colon flash
-    if (debug) server.log("Setting colon flash " + ((value == 1) ? "on" : "off"));
+    if (debug) server.log("Setting colon flash " + ((value) ? "on" : "off"));
     settings.flash = value;
 }
 
 function setColon(value) {
     // This function is called when the app sets or unsets the colon flash
-    if (debug) server.log("Setting colon state " + ((value == 1) ? "on" : "off"));
-    settings.colon = value == 1;
+    if (debug) server.log("Setting colon state " + ((value) ? "on" : "off"));
+    settings.colon = value;
 }
 
 function setLight(value) {
-    if (debug) server.log("Setting light " + ((value == 1) ? "on" : "off"));
+    if (debug) server.log("Setting light " + ((value) ? "on" : "off"));
     settings.on = value;
 
     if (value) {

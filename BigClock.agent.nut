@@ -326,7 +326,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
 // 'GLOBALS'
 
 local appID = APP_NAME + "-" + APP_VERSION;
-local settings = {};
+local settings = null;
 local api = null;
 local firstTime = false;    // USE 'true' TO ZAP THE RTC
 local firstRun = false;     // USE 'true' TO ZAP THE STORED DEFAULTS
@@ -343,10 +343,10 @@ function sendPrefsToDevice(value) {
         // clock a message to set the current time
         device.send("bclock.first.time", true);
         firstTime = false;
-    } else {
-        // Send the prefs
-        device.send("bclock.set.prefs", settings);
     }
+
+    // Send the prefs
+    device.send("bclock.set.prefs", settings);
 }
 
 function appResponse() {
@@ -406,62 +406,53 @@ function appResponse() {
 
 function resetToDefaults() {
     // Reset settings values to the defaults
-    settings.mode = true;
-    settings.bst = true;
-    settings.utc = false;
-    settings.flash = true;
-    settings.colon = true;
-    settings.on = true;
-    settings.offset = 12;
-    settings.brightness = 15;
-    settings.debug = false;
+    server.save({});
+    resetSettings();
     firstTime = true;
+    server.save(settings);
+}
+
+function resetSettings() {
+    // Cache the clock preferences
+    // The table is formatted thus:
+    //    ON: true/false for display on
+    //    MODE: true/false for 24/12-hour view
+    //    BST: true/false for adapt for daylight savings/stick to GMT
+    //    COLON: true/false for colon shown if NOT flashing
+    //    FLASH: true/false for colon flash
+    //    UTC: true/false for UTC set/unset
+    //    OFFSET: -12 to +12 for GMT offset
+    //    BRIGHTNESS: 1 to 15 for boot-set LED brightness
+    //    DEBUG: true/false
+
+    settings = {};
+    settings.on <- true;
+    settings.mode <- true;
+    settings.bst <- true;
+    settings.colon <- true;
+    settings.flash <- true;
+    settings.utc <- false;
+    settings.offset <- 0;
+    settings.brightness <- 15;
+    settings.debug <- false;
     debug = false;
 }
 
 // PROGRAM START
 
 // IMPORTANT Set firstRun at the top of the listing to reset saved settings
-if (firstRun) server.save({});
+if (firstRun) resetToDefaults();
 
-// Cache the clock preferences
-// The table is formatted thus:
-//    ON: true/false for display on
-//    MODE: true/false for 24/12-hour view
-//    BST: true/false for adapt for daylight savings/stick to GMT
-//    COLON: true/false for colon shown if NOT flashing
-//    FLASH: true/false for colon flash
-//    UTC: true/false for UTC set/unset
-//    OFFSET: 0-24 for GMT offset (subtract 12 for actual value)
-//    BRIGHTNESS: 1 to 15 for boot-set LED brightness
-//    DEBUG: true/false
+local savedSettings = server.load();
 
-settings.on <- true;
-settings.mode <- true;
-settings.bst <- true;
-settings.colon <- true;
-settings.flash <- true;
-settings.utc <- false;
-settings.offset <- 12;
-settings.brightness <- 15;
-settings.debug <- debug;
-
-local table = server.load();
-
-if (table.len() != 0) {
+if (savedSettings.len() != 0) {
     // Table is NOT empty so set 'settings' to the loaded table
-    settings = table;
-
-    if (!("debug" in settings)) {
-        server.save({});
-        settings.debug <- debug;
-        server.save(settings);
-    } else {
-        debug = settings.debug;
-    }
+    settings = savedSettings;
+    debug = settings.debug;
 } else {
     // Table is empty, so this must be a first run
     if (debug) server.log("First run - performing setup");
+    resetSettings();
     server.save(settings);
     firstTime = true;
 }
@@ -593,7 +584,8 @@ api.post("/settings", function(context) {
             } else if (data.setutc == "1") {
                 settings.utc = true;
                 if ("utcval" in data) {
-                    settings.offset = data.utcval.tointeger() + 12;
+                    // Store offset as a value from -12 to +12, derived from the value 0 to 24 returned by the web app
+                    settings.offset = data.utcval.tointeger() - 12;
                     device.send("bclock.set.utc", settings.offset);
                 } else {
                     device.send("bclock.set.utc", settings.offset);
@@ -625,7 +617,7 @@ api.post("/action", function(context) {
         if ("action" in data) {
             if (data.action == "reset") {
                 resetToDefaults();
-                device.send("bclock.set.prefs", settings);
+                sendPrefsToDevice(true);
                 if (debug) server.log("Clock settings reset");
                 if (server.save(settings) != 0) server.error("Could not save clock settings after reset");
             }
