@@ -92,7 +92,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                         <td width='20%%'>&nbsp;</td>
                     </tr>
                 </table>
-                <p class='text-center'>&nbsp;<br><small>Big Clock copyright &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
+                <p class='text-center'><small>Big Clock copyright &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
             </div>
         </div>
 
@@ -390,7 +390,8 @@ function appResponse() {
     rs = rs + ((settings.utc) ? "1." : "0.");
 
     // Add UTC offset
-    rs = rs + settings.offset.tostring() + ".";
+    local s = settings.offset + 12;
+    rs = rs + s.tostring() + ".";
 
 	// Add clock state as 1-digit value
 	rs = rs + ((settings.on) ? "1." : "0.");
