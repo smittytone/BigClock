@@ -329,6 +329,9 @@ function resetSettings() {
     settings.offset <- 12;
 }
 
+// Load in generic boot message code
+#include "../generic/bootmessage.nut"
+
 // START
 
 // Register the disconnection handler
