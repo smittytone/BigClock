@@ -5,8 +5,6 @@
 
 // CONSTANTS
 
-const APP_NAME = "BigClock";
-const APP_VERSION = "2.1";
 const CHECK_TIME = 43200;
 const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
 <html>
@@ -22,10 +20,10 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
         <style>
             .center { margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto; }
             body {background-color: #eeeeee;}
-            p {color: #111111; font-family: Questrial}
-            h2 {color: #ee1111; font-family: Monofett; font-size: 4em}
-            h4 {color: #111111; font-family: Questrial}
-            td {color: #111111; font-family: Questrial}
+            p {color: #111111; font-family: Questrial, sans-serif}
+            h2 {color: #ee1111; font-family: Monofett, sans-serif; font-size: 4em}
+            h4 {color: #111111; font-family: Questrial, sans-serif}
+            td {color: #111111; font-family: Questrial, sans-serif}
             hr {border-color: #ee1111}
             .error-message {color: #111111}
             h4.showhide {cursor: pointer}
@@ -39,33 +37,40 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                 <p align='center'>&nbsp;</p>
                 <table width='100%%'>
                     <tr>
-                        <td width='20%%'>&nbsp;</td>
-                        <td width='60%%'>
+                        <td style='width:20%%'>&nbsp;</td>
+                        <td style='width:60%%'>
                             <hr>
                             <h4 align='center'>General Settings</h4>
-                            <div class='mode-checkbox' style='color:#111111;font-family:Questrial'>
+                            <div class='mode-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
                                 <input type='checkbox' name='mode' id='mode' value='mode'> 24-Hour Mode (Switch off for AM/PM)
                             </div>
-                            <div class='mode-checkbox' style='color:#111111;font-family:Questrial'>
+                            <div class='mode-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
                                 <input type='checkbox' name='bst' id='bst' value='bst'> Apply Daylight Savings Time Automatically
                             </div>
-                            <div class='seconds-checkbox' style='color:#111111;font-family:Questrial'>
+                            <div class='seconds-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
                                 <input type='checkbox' name='seconds' id='seconds' value='seconds'> Show Seconds Indicator
                             </div>
-                            <div class='flash-checkbox' style='color:#111111;font-family:Questrial'>
+                            <div class='flash-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
                                 <input type='checkbox' name='flash' id='flash' value='seconds'> Flash Seconds Indicator
                             </div>
                             <div class='slider'>
                                 <p>&nbsp;<br>Clock Brightness</p>
                                 <input type='range' name='brightness' id='brightness' value='15' min='1' max='15'>
+                                <table width='100%%'>
+                                    <tr>
+                                        <td width='50%%' valign='top' align='left'><small>Low</small></td>
+                                        <td width='50%%' valign='top' align='right'><small>High</small></td>
+                                    </tr>
+                                </table>
                                 <p class='brightness-status' align='right'>Brightness: <span></span></p>
                             </div>
-                            <div class='onoff-button' style='color:#111111;font-family:Rubik;weight:bold' align='center'>
+                            <br>
+                            <div class='onoff-button' style='color:#111111;font-family:Rubik, sans-serif;weight:bold' align='center'>
                                 <button type='submit' id='onoff' style='height:32px;width:200px'>Turn off Display</button>
                             </div>
                             <hr>
                             <h4 align='center'>World Time Settings</h4>
-                            <div class='utc-checkbox' style='color:#111111;font-family:Questrial'>
+                            <div class='utc-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
                                 <small><input type='checkbox' name='utc' id='utc' value='utc'> Show World Time</small>
                             </div>
                             <div class='utc-slider'>
@@ -78,25 +83,25 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                                 <h4 class='showhide' align='center'>Click for Advanced Settings</h4>
                                 <div class='advanced' align='center'>
                                     <br>
-                                    <div class='reset-button' style='color:#111111;font-family:Rubik;weight:bold' align='center'>
+                                    <div class='reset-button' style='color:#111111;font-family:Rubik;weight:bold, sans-serif' align='center'>
                                         <button type='submit' id='reset' style='height:28px;width:200px'>Reset Big Clock</button>
                                     </div>
                                     <br>
-                                    <div class='debug-checkbox' style='font-family:Questrial'>
+                                    <div class='debug-checkbox' style='font-family:Questrial, sans-serif'>
                                         <input type='checkbox' name='debug' id='debug' value='debug'> Debug Mode
                                     </div>
                                 </div>
                             </div>
                             <hr>
                         </td>
-                        <td width='20%%'>&nbsp;</td>
+                        <td style='width:20%%'>&nbsp;</td>
                     </tr>
                 </table>
-                <p class='text-center'><small>Big Clock copyright &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
+                <p class='text-center'><small>Big Clock &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
             </div>
         </div>
 
-        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
         <script>
             $('.advanced').hide();
 
@@ -325,7 +330,6 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
 
 // 'GLOBALS'
 
-local appID = APP_NAME + "-" + APP_VERSION;
 local settings = null;
 local api = null;
 local firstTime = false;    // USE 'true' TO ZAP THE RTC
