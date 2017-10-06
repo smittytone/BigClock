@@ -1,8 +1,9 @@
-const LOW = 0;
-const HIGH = 1;
-const DS3234_CTRL_REG_WRITE = "\x8E";
-const DS3234_RAM_START_READ = "\x00";
-const DS3234_RAM_START_WRITE = "\x80";
+// Class-specific constants
+const DS3234_CLASS_LOW_            = 0;
+const DS3234_CLASS_HIGH_           = 1;
+const DS3234_CLASS_CTRL_REG_WRITE  = "\x8E";
+const DS3234_CLASS_RAM_START_READ  = "\x00";
+const DS3234_CLASS_RAM_START_WRITE = "\x80";
 
 class DS3234RTC {
 
@@ -11,7 +12,7 @@ class DS3234RTC {
 	// Bus: SPI
 	// Written by Tony Smith, copyright 2014-17
 
-	static VERSION = "1.0.3";
+	static VERSION = "1.0.4";
 
 	_spi = null;
 	_cs = null;
@@ -35,20 +36,20 @@ class DS3234RTC {
 
 	function init() {
 		// Configure the SPI bus for SPI Mode 3
-		_spi.configure((CLOCK_IDLE_LOW | CLOCK_2ND_EDGE), 3000);
+		_spi.configure((CLOCK_IDLE_DS3234_CLASS_LOW_ | CLOCK_2ND_EDGE), 3000);
 
-		// Set the Chip Select pin HIGH
+		// Set the Chip Select pin DS3234_CLASS_HIGH_
 		_cs.configure(DIGITAL_OUT);
-		_cs.write(HIGH);
+		_cs.write(DS3234_CLASS_HIGH_);
 
 		// Pause 20ms
 		imp.sleep(0.02);
 
 		// Initialise the DS3234 with basic settings, ie. zero Control Register
-		_cs.write(LOW);
-		_spi.write(DS3234_CTRL_REG_WRITE);
+		_cs.write(DS3234_CLASS_LOW_);
+		_spi.write(DS3234_CLASS_CTRL_REG_WRITE);
 		_spi.write("\x00");
-		_cs.write(HIGH);
+		_cs.write(DS3234_CLASS_HIGH_);
 	}
 
 	function setDateAndTime(date, month, year, wday, hour, min, sec) {
@@ -68,14 +69,14 @@ class DS3234RTC {
 			// 0x85 = month (1-12)
 			// 0x86 = year (00-99)
 
-			_cs.write(LOW);
+			_cs.write(DS3234_CLASS_LOW_);
 			local r = blob(1);
 			r.writen((i + 0x80), 'b');
 			_spi.write(r);
 			r = blob(1);
 			r.writen(dateData[i], 'b');
 			_spi.write(r);
-			_cs.write(HIGH);
+			_cs.write(DS3234_CLASS_HIGH_);
 		}
 
 		if (_debug) server.log("RTC set");
@@ -95,13 +96,13 @@ class DS3234RTC {
 			// 0x05 = month (1-12)
 			// 0x06 = year (00-99)
 
-			_cs.write(LOW);
+			_cs.write(DS3234_CLASS_LOW_);
 			local r = blob(1);
 			r.writen(i, 'b');
 			_spi.write(r);
 			b = _spi.readblob(1);
 			dateData[i] = _BCDtoInteger(b[0]);
-			_cs.write(HIGH);
+			_cs.write(DS3234_CLASS_HIGH_);
 		}
 
         if (_debug) {
