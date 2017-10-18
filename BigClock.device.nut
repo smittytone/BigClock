@@ -1,10 +1,10 @@
 // Big Clock
 // Copyright 2014-17, Tony Smith
 
-#require "utilities.nut:1.0.0"
+// IMPORTS
 
-#import "ds3234rtc.class.nut"
-
+#import "../generic/utilities.nut"
+#import "../DS3234/ds3234rtc.class.nut"
 #import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"
 
 // Set the disconnection behaviour
@@ -329,10 +329,10 @@ function resetSettings() {
     settings.offset <- 12;
 }
 
+// START
+
 // Load in generic boot message code
 #include "../generic/bootmessage.nut"
-
-// START
 
 // Register the disconnection handler
 server.onunexpecteddisconnect(disHandler);
