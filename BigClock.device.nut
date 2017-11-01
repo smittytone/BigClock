@@ -17,12 +17,13 @@ server.setsendtimeoutpolicy(RETURN_ON_ERROR, WAIT_TIL_SENT, 10);
 //   1. TICK_DURATION = fraction of a second that each tick takes
 //   2. TICK_TOTAL = 2.0 / TICK_DURATION
 //   3. HALF_TICK_TOTAL = 1.0 / TICK_DURATION
-//   4. DIS_TIMEOUT = disconnection timeout
+//   4. DISCONNECT_TIMEOUT = disconnection timeout
 
 const TICK_DURATION = 0.5;
 const TICK_TOTAL = 4;
 const HALF_TICK_TOTAL = 2;
-const DIS_TIMEOUT = 60;
+const DISCONNECT_TIMEOUT = 60;
+const RECONNECT_TIMEOUT = 30;
 const SYNC_TIME = 15;
 
 // GLOBALS
@@ -44,9 +45,9 @@ local year = 0;
 local disTime = -1;
 local disMessage = "";
 local tickCount = 0;
+local disFlag = false;
 local tickFlag = true;
 local debug = true;
-local disFlag = false;
 
 // TIME FUNCTIONS
 
@@ -282,36 +283,29 @@ function disHandler(reason) {
     // Sets 'disFlag' true if there is no connection
     if (reason != SERVER_CONNECTED) {
         // Server is not connected
-        disFlag = true;
-
-        if (disTime == -1) {
+        if (!disFlag) {
+            disFlag = true;
             disTime = time();
             local now = date();
             disMessage = "Went offline at " + now.hour + ":" + now.min + ":" + now.sec + ". Reason: " + reason;
         }
 
-        imp.wakeup(DIS_TIMEOUT, reconnect);
+        imp.wakeup(DISCONNECT_TIMEOUT, function() {
+            server.connect(disHandler, RECONNECT_TIMEOUT);
+        });
     } else {
         // Server is connected
-        if (debug) {
-            server.log(disMessage);
-            server.log("Back online after " + ((time() - disTime) / 1000) + " seconds");
-        }
+        if (disFlag) {
+            if (debug) {
+                server.log(disMessage);
+                server.log("Back online after " + (time() - disTime) + " seconds");
+            }
 
-        disTime = -1;
-        disFlag = false;
-        disMessage = null;
+            disFlag = false;
+        }
 
         // Re-acquire the prefs in case they were changed when the clock went offline
         agent.send("bclock.get.prefs", true);
-    }
-}
-
-function reconnect() {
-    if (server.isconnected()) {
-        disHandler(SERVER_CONNECTED);
-    } else {
-        server.connect(disHandler, 30);
     }
 }
 

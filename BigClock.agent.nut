@@ -23,22 +23,33 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
             p {color: #111111; font-family: Questrial, sans-serif}
             h2 {color: #ee1111; font-family: Monofett, sans-serif; font-size: 4em}
             h4 {color: #111111; font-family: Questrial, sans-serif}
+            h4.showhide {cursor: pointer}
             td {color: #111111; font-family: Questrial, sans-serif}
             hr {border-color: #ee1111}
             .error-message {color: #111111}
-            h4.showhide {cursor: pointer}
+            .tabborder {width: 20%%}
+            .tabcontent {width: 60%%}
+            .uicontent {border: 2px solid #ee1111}
+            .container {padding: 20px}
+
+
+            @media only screen and (max-width: 640px) {
+                .tabborder {width: 5%%}
+                .tabcontent {width: 90%%}
+                .container {padding: 5px}
+                .uicontent {border: 0px}
+            }
         </style>
     </head>
     <body>
-        <div class='container' style='padding: 20px;'>
-            <div style='border: 2px solid #ee1111' align='center'>
+        <div class='container'>
+            <div class='uicontent' align='center'>
                 <h2 align='center'>Big Clock</h2>
                 <h4 align='center' class='clock-status'><i><span>This Big Clock is online</span></i></h4>
-                <p align='center'>&nbsp;</p>
                 <table width='100%%'>
                     <tr>
-                        <td style='width:20%%'>&nbsp;</td>
-                        <td style='width:60%%'>
+                         <td class='tabborder'>&nbsp;</td>
+                         <td class='tabcontent'>
                             <hr>
                             <h4 align='center'>General Settings</h4>
                             <div class='mode-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
@@ -94,7 +105,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                             </div>
                             <hr>
                         </td>
-                        <td style='width:20%%'>&nbsp;</td>
+                        <td class='tabborder'>&nbsp;</td>
                     </tr>
                 </table>
                 <p class='text-center'><small>Big Clock &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
