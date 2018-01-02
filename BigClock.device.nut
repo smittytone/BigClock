@@ -145,16 +145,12 @@ function displayTime() {
     }
 
     // Is the clock disconnected? If so, flag the fact
-    if (disFlag) colonValue = colonValue | 0x10;
+    if (disFlag) colonValue = colonValue + 0x10;
 
     // Check whether the colon should appear
-    if (settings.colon) {
+    if (settings.colon && (!settings.flash || (settings.flash && tickFlag))) {
         // Colon is set to be displayed. Will it flash?
-        if (settings.flash) {
-            if (tickFlag) colonValue = colonValue | 0x02;
-        } else {
-            colonValue = colonValue | 0x02;
-        }
+        colonValue = colonValue + 0x02;
     }
 
     clock.setColon(colonValue).updateDisplay();
@@ -285,7 +281,7 @@ function disHandler(reason) {
         // Server is not connected
         if (!disFlag) {
             disFlag = true;
-            disTime = time();
+            disTime = hardware.millis();
             local now = date();
             disMessage = "Went offline at " + now.hour + ":" + now.min + ":" + now.sec + ". Reason: " + reason;
         }
@@ -298,7 +294,10 @@ function disHandler(reason) {
         if (disFlag) {
             if (debug) {
                 server.log(disMessage);
-                server.log("Back online after " + (time() - disTime) + " seconds");
+                if (disTime != null) {
+                    server.log("Back online after " + ((hardware.millis() - disTime) / 1000) + " seconds");
+                    disTime = null;
+                }
             }
 
             disFlag = false;
