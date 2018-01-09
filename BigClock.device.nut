@@ -281,11 +281,11 @@ function disHandler(reason) {
         // Server is not connected
         if (!disFlag) {
             disFlag = true;
-            disTime = hardware.millis();
             local now = date();
             disMessage = "Went offline at " + now.hour + ":" + now.min + ":" + now.sec + ". Reason: " + reason;
         }
 
+        // Schedule an attempt to re-connect in DISCONNECT_TIMEOUT seconds
         imp.wakeup(DISCONNECT_TIMEOUT, function() {
             server.connect(disHandler, RECONNECT_TIMEOUT);
         });
@@ -294,14 +294,13 @@ function disHandler(reason) {
         if (disFlag) {
             if (debug) {
                 server.log(disMessage);
-                if (disTime != null) {
-                    server.log("Back online after " + ((hardware.millis() - disTime) / 1000) + " seconds");
-                    disTime = null;
-                }
+                local now = date();
+                server.log("Now back online at " + now.hour + ":" + now.min + ":" + now.sec);
             }
-
-            disFlag = false;
         }
+
+        // Clear the disconnection flag
+        disFlag = false;
 
         // Re-acquire the prefs in case they were changed when the clock went offline
         agent.send("bclock.get.prefs", true);
