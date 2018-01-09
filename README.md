@@ -75,4 +75,4 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Licence
 
-The BigClock code and design is copyright &copy; 2014-2017 Tony Smith and licensed under the terms of the [MIT Licence](https://github.com/smittytone/BigClock/blob/master/LICENSE).
+The BigClock code and design is copyright &copy; 2014-2018 Tony Smith and licensed under the terms of the [MIT Licence](https://github.com/smittytone/BigClock/blob/master/LICENSE).

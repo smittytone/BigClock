@@ -1,5 +1,5 @@
 // Big Clock
-// Copyright 2014-17, Tony Smith
+// Copyright 2014-18, Tony Smith
 
 #require "Rocky.class.nut:2.0.0"
 
