@@ -13,18 +13,18 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
         <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
         <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
         <link href='https://fonts.googleapis.com/css?family=Monofett' rel='stylesheet'>
-        <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
         <link rel='apple-touch-icon' href='https://smittytone.github.io/images/ati-bclock.png'>
         <link rel='shortcut icon' href='https://smittytone.github.io/images/ico-bclock.ico' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <style>
             .center { margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto; }
             body {background-color: #eeeeee;}
-            p {color: #111111; font-family: Questrial, sans-serif}
+            p {color: #111111; font-family: Comfortaa, sans-serif}
             h2 {color: #ee1111; font-family: Monofett, sans-serif; font-size: 4em}
-            h4 {color: #111111; font-family: Questrial, sans-serif}
+            h4 {color: #111111; font-family: Comfortaa, sans-serif}
             h4.showhide {cursor: pointer}
-            td {color: #111111; font-family: Questrial, sans-serif}
+            td {color: #111111; font-family: Comfortaa, sans-serif}
             hr {border-color: #ee1111}
             .error-message {color: #111111}
             .tabborder {width: 20%%}
@@ -52,16 +52,16 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                          <td class='tabcontent'>
                             <hr>
                             <h4 align='center'>General Settings</h4>
-                            <div class='mode-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
+                            <div class='mode-checkbox' style='color:#111111;font-family:Comfortaa, sans-serif'>
                                 <input type='checkbox' name='mode' id='mode' value='mode'> 24-Hour Mode (Switch off for AM/PM)
                             </div>
-                            <div class='mode-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
+                            <div class='mode-checkbox' style='color:#111111;font-family:Comfortaa, sans-serif'>
                                 <input type='checkbox' name='bst' id='bst' value='bst'> Apply Daylight Savings Time Automatically
                             </div>
-                            <div class='seconds-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
+                            <div class='seconds-checkbox' style='color:#111111;font-family:Comfortaa, sans-serif'>
                                 <input type='checkbox' name='seconds' id='seconds' value='seconds'> Show Seconds Indicator
                             </div>
-                            <div class='flash-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
+                            <div class='flash-checkbox' style='color:#111111;font-family:Comfortaa, sans-serif'>
                                 <input type='checkbox' name='flash' id='flash' value='seconds'> Flash Seconds Indicator
                             </div>
                             <div class='slider'>
@@ -81,7 +81,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                             </div>
                             <hr>
                             <h4 align='center'>World Time Settings</h4>
-                            <div class='utc-checkbox' style='color:#111111;font-family:Questrial, sans-serif'>
+                            <div class='utc-checkbox' style='color:#111111;font-family:Comfortaa, sans-serif'>
                                 <small><input type='checkbox' name='utc' id='utc' value='utc'> Show World Time</small>
                             </div>
                             <div class='utc-slider'>
@@ -98,7 +98,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                                         <button type='submit' id='reset' style='height:28px;width:200px'>Reset Big Clock</button>
                                     </div>
                                     <br>
-                                    <div class='debug-checkbox' style='font-family:Questrial, sans-serif'>
+                                    <div class='debug-checkbox' style='font-family:Comfortaa, sans-serif'>
                                         <input type='checkbox' name='debug' id='debug' value='debug'> Debug Mode
                                     </div>
                                 </div>
