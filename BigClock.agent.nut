@@ -1,10 +1,11 @@
 // Big Clock
 // Copyright 2014-18, Tony Smith
 
+// IMPORTS
 #require "Rocky.class.nut:2.0.0"
 
 // CONSTANTS
-
+const RESTART_TIMEOUT = 120;
 const CHECK_TIME = 43200;
 const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
 <html>
@@ -339,16 +340,15 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
     </body>
 </html>";
 
-// 'GLOBALS'
-
+// GLOBALS
 local settings = null;
 local api = null;
+local agentRestartTimer = null;
 local firstTime = false;    // USE 'true' TO ZAP THE RTC
 local firstRun = false;     // USE 'true' TO ZAP THE STORED DEFAULTS
 local debug = false;
 
 // CLOCK FUNCTIONS
-
 function sendPrefsToDevice(value) {
     // Big Clock has requested the current set-up data
     if (debug) server.log("Sending stored preferences to the device");
