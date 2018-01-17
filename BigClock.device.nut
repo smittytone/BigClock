@@ -2,7 +2,6 @@
 // Copyright 2014-18, Tony Smith
 
 // IMPORTS
-
 #import "../generic/utilities.nut"
 #import "../DS3234/ds3234rtc.class.nut"
 #import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"
@@ -11,14 +10,12 @@
 server.setsendtimeoutpolicy(RETURN_ON_ERROR, WAIT_TIL_SENT, 10);
 
 // CONSTANTS
-
 // These values are not user definable, so set as constants to save
 // calculation time and memory:
 //   1. TICK_DURATION = fraction of a second that each tick takes
 //   2. TICK_TOTAL = 2.0 / TICK_DURATION
 //   3. HALF_TICK_TOTAL = 1.0 / TICK_DURATION
 //   4. DISCONNECT_TIMEOUT = disconnection timeout
-
 const TICK_DURATION = 0.5;
 const TICK_TOTAL = 4;
 const HALF_TICK_TOTAL = 2;
@@ -27,7 +24,6 @@ const RECONNECT_TIMEOUT = 30;
 const SYNC_TIME = 15;
 
 // GLOBALS
-
 local rtc = null;
 local clock = null;
 local syncTimer = null;
@@ -50,7 +46,6 @@ local tickFlag = true;
 local debug = true;
 
 // TIME FUNCTIONS
-
 function getTime() {
     // This is the main clock loop
     // Queue the function to run again in TICK_DURATION seconds
@@ -147,7 +142,12 @@ function displayTime() {
     // Is the clock disconnected? If so, flag the fact
     if (disFlag) colonValue = colonValue + 0x10;
 
-    // Check whether the colon should appear
+    if (disFlag && server.isconnected()) {
+        server.log("Whoops! {" + disMessage + "}");
+        disFlag = false;
+    }
+
+        // Check whether the colon should appear
     if (settings.colon && (!settings.flash || (settings.flash && tickFlag))) {
         // Colon is set to be displayed. Will it flash?
         colonValue = colonValue + 0x02;
@@ -168,7 +168,6 @@ function syncText() {
 }
 
 // PREFERENCES FUNCTIONS
-
 function setInitialTime(firstTime) {
     // Set the RTC using the server time
     if (firstTime) {
@@ -273,13 +272,13 @@ function setDebug(ds) {
 }
 
 // OFFLINE OPERATION FUNCTIONS
-
 function disHandler(reason) {
     // Called if the server connection is broken or re-established
     // Sets 'disFlag' true if there is no connection
     if (reason != SERVER_CONNECTED) {
         // Server is not connected
         if (!disFlag) {
+            // We weren't previously disconnected, so mark us as disconnected now
             disFlag = true;
             local now = date();
             disMessage = "Went offline at " + now.hour + ":" + now.min + ":" + now.sec + ". Reason: " + reason;
@@ -292,6 +291,7 @@ function disHandler(reason) {
     } else {
         // Server is connected
         if (disFlag) {
+            // We were disconnected before, so log the timing and reason
             if (debug) {
                 server.log(disMessage);
                 local now = date();
