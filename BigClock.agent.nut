@@ -2,7 +2,7 @@
 // Copyright 2014-18, Tony Smith
 
 // IMPORTS
-#require "Rocky.class.nut:2.0.0"
+#require "Rocky.class.nut:2.0.1"
 
 // CONSTANTS
 const RESTART_TIMEOUT = 120;
