@@ -4,6 +4,11 @@
 // IMPORTS
 #require "Rocky.class.nut:2.0.1"
 
+// If you are NOT using Squinter or a similar tool, comment out the following line...
+#import "~/Dropbox/Programming/Imp/Codes/bigclock.nut"
+// ...and uncomment and fill in this line:
+// const APP_CODE = "YOUR_APP_UUID";
+
 // CONSTANTS
 const RESTART_TIMEOUT = 120;
 const CHECK_TIME = 43200;
@@ -660,10 +665,9 @@ api.post("/action", function(context) {
     }
 });
 
-// GET at /info returns device capabilities (EXPERIMENTAL)
-api.get("/info", function(context) {
-    local info = {};
-    info.app <- "1BD51C33-9F34-48A9-95EA-C3F589A8136C";
-    info.watchsupported <- "true";
+// GET at /controller/info returns app info for Controller
+api.get("/controller/info", function(context) {
+    local info = { "appcode": APP_CODE,
+                   "watchsupported": "true" };
     context.send(200, http.jsonencode(info));
 });
