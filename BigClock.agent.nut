@@ -204,11 +204,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
             }
 
             function updateState(s) {
-                if (s == 'd') {
-                    $('.clock-status span').text('This Big Clock is offline');
-                } else {
-                    $('.clock-status span').text('This Big Clock is online');
-                }
+                $('.clock-status span').text('This Big Clock is ' + ((s == '0') ? 'offline' : 'online'));
             }
 
             function getState(callback) {
@@ -231,7 +227,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
 
             function checkState() {
                 $.ajax({
-                    url : agenturl + '/state',
+                    url : agenturl + '/controller/state',
                     type: 'GET',
                     success : function(response) {
                         updateState(response)
@@ -489,12 +485,6 @@ api.get("/", function(context) {
     context.send(200, format(HTML_STRING, http.agenturl()));
 });
 
-// GET call to /state - return 'c' or 'd' for 'connected' or 'disconnected'
-api.get("/state", function(context) {
-    local a = (device.isconnected() ? "c" : "d");
-    context.send(200, a);
-});
-
 // GET call to /settings  - return the settings string
 api.get("/settings", function(context) {
     context.send(200, appResponse());
@@ -671,3 +661,10 @@ api.get("/controller/info", function(context) {
                    "watchsupported": "true" };
     context.send(200, http.jsonencode(info));
 });
+
+// GET call to /controller/state returns device status
+api.get("/controller/state", function(context) {
+    local data = (device.isconnected() ? "1" : "0");
+    context.send(200, data);
+});
+
