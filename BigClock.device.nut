@@ -62,7 +62,7 @@ function getTime() {
     year = time[6];
 
     // Adjust the hour for BST and midnight rollover
-    if (settings.bst && utilities.bstCheck()) hour++;
+    if (settings.bst && Utilities.bstCheck()) hour++;
 
     // Update for world time
     if (settings.utc) {
@@ -290,13 +290,11 @@ function disHandler(reason) {
         });
     } else {
         // Server is connected
-        if (disFlag) {
+        if (disFlag && debug) {
             // We were disconnected before, so log the timing and reason
-            if (debug) {
-                server.log(disMessage);
-                local now = date();
-                server.log("Now back online at " + now.hour + ":" + now.min + ":" + now.sec);
-            }
+            server.log(disMessage);
+            local now = date();
+            server.log("Now back online at " + now.hour + ":" + now.min + ":" + now.sec);
         }
 
         // Clear the disconnection flag

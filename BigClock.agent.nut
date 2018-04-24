@@ -114,7 +114,7 @@ const HTML_STRING = @"<!DOCTYPE html><html lang='en-US'><meta charset='UTF-8'>
                         <td class='tabborder'>&nbsp;</td>
                     </tr>
                 </table>
-                <p class='text-center'><small>Big Clock &copy; 2014-17 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
+                <p class='text-center'><small>Big Clock &copy; 2014-18 Tony Smith</small><br>&nbsp;<br><a href='https://github.com/smittytone/BigClock' target='_blank'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
             </div>
         </div>
 
