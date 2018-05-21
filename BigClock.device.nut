@@ -62,7 +62,7 @@ function getTime() {
     year = time[6];
 
     // Adjust the hour for BST and midnight rollover
-    if (settings.bst && Utilities.bstCheck()) hour++;
+    if (settings.bst && utilities.bstCheck()) hour++;
 
     // Update for world time
     if (settings.utc) {
