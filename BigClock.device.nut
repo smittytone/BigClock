@@ -3,6 +3,7 @@
 
 // IMPORTS
 #import "../generic/utilities.nut"
+#import "../generic/disconnect.nut"
 #import "../DS3234/ds3234rtc.class.nut"
 #import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"
 
@@ -272,38 +273,26 @@ function setDebug(ds) {
 }
 
 // OFFLINE OPERATION FUNCTIONS
-function disHandler(reason) {
+function discHandler(event) {
     // Called if the server connection is broken or re-established
-    // Sets 'disFlag' true if there is no connection
-    if (reason != SERVER_CONNECTED) {
-        // Server is not connected
-        if (!disFlag) {
-            // We weren't previously disconnected, so mark us as disconnected now
-            disFlag = true;
-            local now = date();
-            disMessage = "Went offline at " + now.hour + ":" + now.min + ":" + now.sec + ". Reason: " + reason;
+    if ("message" in event && debug) server.log("Disconnection Manager: " + event.message);
+
+    if ("type" in event) {
+        if (event.type == "disconnected") {
+            isDisconnected = true;
+            isConnecting = false;
+        } else if (event.type == "connecting") {
+            isConnecting = true;
+        } else if (event.type == "connected") {
+            isDisconnected = false;
+            isConnecting = false;
+
+            // Re-acquire the prefs in case they were changed when the clock went offline
+            agent.send("bclock.get.prefs", true);
         }
-
-        // Schedule an attempt to re-connect in DISCONNECT_TIMEOUT seconds
-        imp.wakeup(DISCONNECT_TIMEOUT, function() {
-            server.connect(disHandler, RECONNECT_TIMEOUT);
-        });
-    } else {
-        // Server is connected
-        if (disFlag && debug) {
-            // We were disconnected before, so log the timing and reason
-            server.log(disMessage);
-            local now = date();
-            server.log("Now back online at " + now.hour + ":" + now.min + ":" + now.sec);
-        }
-
-        // Clear the disconnection flag
-        disFlag = false;
-
-        // Re-acquire the prefs in case they were changed when the clock went offline
-        agent.send("bclock.get.prefs", true);
     }
 }
+
 
 // MISC FUNCTIONS
 
@@ -319,13 +308,17 @@ function resetSettings() {
     settings.offset <- 12;
 }
 
+
 // START
 
 // Load in generic boot message code
 #include "../generic/bootmessage.nut"
 
-// Register the disconnection handler
-server.onunexpecteddisconnect(disHandler);
+// Set up the disconnection manager
+disconnectionManager.eventCallback = discHandler;
+disconnectionManager.reconnectTimeout = RECONNECT_TIMEOUT;
+disconnectionManager.reconnectDelay = DISCONNECT_TIMEOUT;
+disconnectionManager.start();
 
 // Set up the RTC
 rtc = DS3234RTC(hardware.spi257, hardware.pin1);
