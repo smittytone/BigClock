@@ -24,6 +24,9 @@
     .checkarea input:checked ~ .checkmark:after {display: block;}
     .checkarea .checkmark:after {left: 9px; top: 5px; width: 8px; height: 15px; border: solid black; border-width: 0px 3px 3px 0px;
                                  -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);}
+    .uicontent {border: 2px solid #CB444A}
+    .container {padding: 20px}
+    .advanced {background-color: #dddddd;}
     body {background-color: #eeeeee;}
     p {color: #111111; font-family: Comfortaa, sans-serif}
     p.colophon {font-size: 0.8em; text-align: center;font-family: Rubik, sans-serif;}
@@ -31,12 +34,8 @@
     p.subslider {font-size:0.8em;}
     h2 {color: #CB444A; font-family: Monofett, sans-serif; font-size: 4em}
     h4 {color: #111111; font-family: Comfortaa, sans-serif;margin-bottom:12px;}
-    h4.showhide {cursor: pointer}
-    td {color: #111111; font-family: Comfortaa, sans-serif}
+    h4.showhide {cursor: pointer;margin-bottom:0px;vertical-align: middle;}
     hr {border-color: #CB444A}
-    .error-message {color: #111111}
-    .uicontent {border: 2px solid #CB444A}
-    .container {padding: 20px}
 
     @media only screen and (max-width: 640px) {
       .container {padding: 5px}
@@ -74,7 +73,8 @@
             </label>
             <input type='range' class='slider' name='utcs' id='utcs' value='0' min='0' max='24'>
             <table width='100%%'><tr><td width='30%%' align='left'>-12</td><td width='40%%' align='center'>0</td><td width='30%%' align='right'>+12</td></tr></table>
-            <p class='utc-status subslider' align='right'>Offset from local time: <span></span> hours<br>&nbsp;</p>
+            <p class='utc-status subslider' align='right'>Offset from local time: <span></span> hours</p>
+            <hr>
             <h4 align='center'>Display Settings</h4>
             <label class='checkarea'> Show Seconds Indicator
               <input type='checkbox' name='seconds' id='seconds' value='seconds'><span class='checkmark'></span>
