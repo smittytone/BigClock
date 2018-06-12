@@ -7,8 +7,6 @@
 #import "../DS3234/ds3234rtc.class.nut"
 #import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"
 
-// Set the disconnection behaviour
-server.setsendtimeoutpolicy(RETURN_ON_ERROR, WAIT_TIL_SENT, 10);
 
 // CONSTANTS
 // These values are not user definable, so set as constants to save
@@ -271,6 +269,7 @@ function setDebug(ds) {
     debug = ds;
     server.log("BigClock debug " + ((debug) ? "enabled" : "disabled"));
 }
+
 
 // OFFLINE OPERATION FUNCTIONS
 function discHandler(event) {
