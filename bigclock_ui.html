@@ -10,21 +10,22 @@
   <meta charset='UTF-8'>
   <style>
     .center {margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto;}
-    .slider {-webkit-appearance: none; width: 100%%; height: 25px; background: #CCCCCC; outline: none;}
+    .showhide {cursor: pointer; margin-bottom: 0px; vertical-align: middle;}
+    .slider {-webkit-appearance: none; width: 100%%; height: 25px; background: #cccccc; outline: none;}
     .slider::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 25px; height: 25px;
-                                   border-radius: 50%%; background: #CB444A; cursor: pointer;}
-    .slider::-moz-range-thumb {width: 25px; height: 25px; border-radius: 50%%;  background: #CB444A; cursor: pointer;}
+                                   border-radius: 50%%; background: #cb444a; cursor: pointer;}
+    .slider::-moz-range-thumb {width: 25px; height: 25px; border-radius: 50%%;  background: #cb444a; cursor: pointer;}
     .checkarea {display: block; position: relative; padding-left: 35px; margin-bottom: 12px;
                 cursor: pointer; font-size: 1em; color: black; font-family: Comfortaa, sans-serif; font-size: 0.9em;
                 -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
     .checkarea input {position: absolute; opacity: 0; cursor: pointer;}
-    .checkmark {position: absolute; top: 0; left: 0; height: 24px; width: 24px; background-color: white;}
-    .checkarea input:checked ~ .checkmark {background-color: white;}
+    .checkmark {position: absolute; top: 0; left: 0; height: 24px; width: 24px; background-color: #cccccc;}
+    .checkarea input:checked ~ .checkmark {background-color: #cccccc;}
     .checkmark:after {content: ''; position: absolute; display: none;}
     .checkarea input:checked ~ .checkmark:after {display: block;}
     .checkarea .checkmark:after {left: 9px; top: 5px; width: 8px; height: 15px; border: solid black; border-width: 0px 3px 3px 0px;
                                  -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);}
-    .uicontent {border: 2px solid #CB444A}
+    .uicontent {border: 2px solid #cb444a}
     .container {padding: 20px}
     .advanced {background-color: #dddddd;}
     body {background-color: #eeeeee;}
@@ -32,10 +33,9 @@
     p.colophon {font-size: 0.8em; text-align: center;font-family: Rubik, sans-serif;}
     p.subhead {font-size:1.0em;font-weight: bold;margin-bottom:10px;}
     p.subslider {font-size:0.8em;}
-    h2 {color: #CB444A; font-family: Monofett, sans-serif; font-size: 4em}
+    h2 {color: #cb444a; font-family: Monofett, sans-serif; font-size: 4em}
     h4 {color: #111111; font-family: Comfortaa, sans-serif;margin-bottom:12px;}
-    h4.showhide {cursor: pointer;margin-bottom:0px;vertical-align: middle;}
-    hr {border-color: #CB444A}
+    hr {border-color: #cb444a}
 
     @media only screen and (max-width: 640px) {
       .container {padding: 5px}
@@ -47,7 +47,7 @@
 </head>
 <body>
   <div class='container'>
-    <div class='row uicontent' align='center'>
+    <div class='row uicontent'>
       <div class='col'>
         <!-- Title and Data Readout Row -->
         <div class='row' align='center'>
@@ -72,7 +72,13 @@
               <input type='checkbox' name='utc' id='utc' value='utc'><span class='checkmark'></span>
             </label>
             <input type='range' class='slider' name='utcs' id='utcs' value='0' min='0' max='24'>
-            <table width='100%%'><tr><td width='30%%' align='left'>-12</td><td width='40%%' align='center'>0</td><td width='30%%' align='right'>+12</td></tr></table>
+            <table width='100%%'>
+              <tr>
+                <td width='30%%' align='left'><small>-12</small></td>
+                <td width='40%%' align='center'><small>0</small></td>
+                <td width='30%%' align='right'><small>+12</small></td>
+              </tr>
+            </table>
             <p class='utc-status subslider' align='right'>Offset from local time: <span></span> hours</p>
             <hr>
             <h4 align='center'>Display Settings</h4>
@@ -84,14 +90,19 @@
             </label>
             <p class='subhead text-center'>Brightness</p>
             <input type='range' class='slider' name='brightness' id='brightness' value='15' min='1' max='15'>
-            <table width='100%%'><tr><td width='50%%' align='left'><small>Low</small></td><td width='50%%' align='right'><small>High</small></td></tr></table>
+            <table width='100%%'>
+              <tr>
+                <td width='50%%' align='left'><small>Low</small></td>
+                <td width='50%%' align='right'><small>High</small></td>
+              </tr>
+            </table>
             <p class='brightness-status subslider' align='right'>Current: <span></span><br>&nbsp;</p>
             <div class='onoff-button' align='center'>
               <button type='submit' class='btn btn-danger' id='onoff' style='width:200px'>Turn off Display</button>
             </div>
             <p>&nbsp;</p>
             <div class='advancedsettings' style='background-color:#cccccc;'>
-              <h4 class='showhide' align='center' style='line-height:40px;'>Advanced Settings</h4>
+              <p class='showhide text-center' style='line-height:36px;'>Advanced Settings</h4>
               <div class='advanced' align='center'>
                 <br>
                 <div class='debug-checkbox' style='font-family:Comfortaa, sans-serif'>
@@ -109,9 +120,9 @@
           <div class='col-2'>&nbsp;</div>
         </div>
         <!-- Colophon Row -->
-        <div class='row' align='center'>
+        <div class='row'>
           <div class='col'>
-            <p class='colophon'>Big Clock &copy; 2014-18 Tony Smith<br>
+            <p class='colophon text-center'>Big Clock &copy; 2014-18 Tony Smith<br>
             <a href='https://github.com/smittytone/BigClock' target='_blank'>
             <img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
           </div>
