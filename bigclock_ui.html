@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>Big Clock</title>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css'>
+  <link href='https://fonts.googleapis.com/css?family=Rubik|Monofett|Comfortaa' rel='stylesheet'>
+  <link rel='apple-touch-icon' href='https://smittytone.github.io/images/ati-bclock.png'>
+  <link rel='shortcut icon' href='https://smittytone.github.io/images/ico-bclock.ico' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta charset='UTF-8'>
+  <style>
+    .center {margin-left: auto; margin-right: auto; margin-bottom: auto; margin-top: auto;}
+    .showhide {cursor: pointer; margin-bottom: 0px; vertical-align: middle;}
+    .slider {-webkit-appearance: none; width: 100%%; height: 25px; background: #cccccc; outline: none;}
+    .slider::-webkit-slider-thumb {-webkit-appearance: none; appearance: none; width: 25px; height: 25px;
+                                   border-radius: 50%%; background: #cb444a; cursor: pointer;}
+    .slider::-moz-range-thumb {width: 25px; height: 25px; border-radius: 50%%;  background: #cb444a; cursor: pointer;}
+    .checkarea {display: block; position: relative; padding-left: 35px; margin-bottom: 12px;
+                cursor: pointer; font-size: 1em; color: black; font-family: Comfortaa, sans-serif; font-size: 0.9em;
+                -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}
+    .checkarea input {position: absolute; opacity: 0; cursor: pointer;}
+    .checkmark {position: absolute; top: 0; left: 0; height: 24px; width: 24px; background-color: #cccccc;}
+    .checkarea input:checked ~ .checkmark {background-color: #cccccc;}
+    .checkmark:after {content: ''; position: absolute; display: none;}
+    .checkarea input:checked ~ .checkmark:after {display: block;}
+    .checkarea .checkmark:after {left: 9px; top: 5px; width: 8px; height: 15px; border: solid black; border-width: 0px 3px 3px 0px;
+                                 -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg);}
+    .uicontent {border: 2px solid #cb444a}
+    .container {padding: 20px}
+    .advanced {background-color: #dddddd;}
+    body {background-color: #eeeeee;}
+    p {color: #111111; font-family: Comfortaa, sans-serif}
+    p.colophon {font-size: 0.8em; text-align: center;font-family: Rubik, sans-serif;}
+    p.subhead {font-size:1.0em;font-weight: bold;margin-bottom:10px;}
+    p.subslider {font-size:0.8em;}
+    h2 {color: #cb444a; font-family: Monofett, sans-serif; font-size: 4em}
+    h4 {color: #111111; font-family: Comfortaa, sans-serif;margin-bottom:12px;}
+    hr {border-color: #cb444a}
+
+    @media only screen and (max-width: 640px) {
+      .container {padding: 5px}
+      .uicontent {border: 0px}
+      .col-2 {max-width: 0%%; flex: 0 0 0%%;}
+      .col-8 {max-width: 100%%; flex: 0 0 100%%;}
+    }
+  </style>
+</head>
+<body>
+  <div class='container'>
+    <div class='row uicontent'>
+      <div class='col'>
+        <!-- Title and Data Readout Row -->
+        <div class='row' align='center'>
+          <div class='col'>
+            <h2>Big Clock</h2>
+            <h4 class='clock-status'><i><span>This Big Clock is online</span></i><br>&nbsp;</h4>
+          </div>
+        </div>
+        <!-- Settings Row -->
+        <div class='row' align='left'>
+          <div class='col-2'>&nbsp;</div>
+          <div class='col-8'>
+            <h4 align='center'>Time Settings</h4>
+            <label class='checkarea'> 24-Hour Mode (Switch off for AM/PM)
+              <input type='checkbox' name='mode' id='mode' value='mode'><span class='checkmark'></span>
+            </label>
+            <label class='checkarea'> Apply Daylight Savings Time Automatically
+              <input type='checkbox' name='bst' id='bst' value='bst'><span class='checkmark'></span>
+            </label>
+            <p class='subhead text-center'>World Time</p>
+            <label class='checkarea utc-checkbox'> Show World Time
+              <input type='checkbox' name='utc' id='utc' value='utc'><span class='checkmark'></span>
+            </label>
+            <input type='range' class='slider' name='utcs' id='utcs' value='0' min='0' max='24'>
+            <table width='100%%'>
+              <tr>
+                <td width='30%%' align='left'><small>-12</small></td>
+                <td width='40%%' align='center'><small>0</small></td>
+                <td width='30%%' align='right'><small>+12</small></td>
+              </tr>
+            </table>
+            <p class='utc-status subslider' align='right'>Offset from local time: <span></span> hours</p>
+            <hr>
+            <h4 align='center'>Display Settings</h4>
+            <label class='checkarea'> Show Seconds Indicator
+              <input type='checkbox' name='seconds' id='seconds' value='seconds'><span class='checkmark'></span>
+            </label>
+            <label class='checkarea'> Flash Seconds Indicator
+              <input type='checkbox' name='flash' id='flash' value='seconds'><span class='checkmark'></span>
+            </label>
+            <p class='subhead text-center'>Brightness</p>
+            <input type='range' class='slider' name='brightness' id='brightness' value='15' min='1' max='15'>
+            <table width='100%%'>
+              <tr>
+                <td width='50%%' align='left'><small>Low</small></td>
+                <td width='50%%' align='right'><small>High</small></td>
+              </tr>
+            </table>
+            <p class='brightness-status subslider' align='right'>Current brightness: <span></span><br>&nbsp;</p>
+            <div class='onoff-button' align='center'>
+              <button type='submit' class='btn btn-danger' id='onoff' style='width:200px'>Turn off Display</button>
+            </div>
+            <p>&nbsp;</p>
+            <div class='advancedsettings' style='background-color:#cccccc;'>
+              <p class='showhide text-center' style='line-height:36px;'>Advanced Settings</h4>
+              <div class='advanced' align='center'>
+                <br>
+                <div class='debug-checkbox' style='font-family:Comfortaa, sans-serif'>
+                  <input type='checkbox' name='debug' id='debug' value='debug'> Debug Mode
+                </div>
+                <br>
+                <div class='reset-button' align='center'>
+                  <button class='btn btn-danger' type='submit' id='reset' style='width:200px'>Reset Big Clock</button>
+                </div>
+                <br>
+              </div>
+            </div>
+            <p>&nbsp;</p>
+          </div>
+          <div class='col-2'>&nbsp;</div>
+        </div>
+        <!-- Colophon Row -->
+        <div class='row'>
+          <div class='col'>
+            <p class='colophon text-center'>Big Clock &copy; 2014-18 Tony Smith<br>
+            <a href='https://github.com/smittytone/BigClock' target='_blank'>
+            <img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32'></a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+  <script>
+  $('.advanced').hide();
+
+  // Variables
+  var agenturl = '%s';
+  var displayon = true;
+  var stateflag = false;
+
+  // Get initial readings
+  getState(updateReadout);
+
+  // Set UI click actions: Checkboxes
+  $('#mode').click(setmode);
+  $('#bst').click(setbst);
+  $('#seconds').click(setcolon);
+  $('#flash').click(setflash);
+  $('#utc').click(setutc);
+  $('#debug').click(setdebug);
+
+  // Buttons
+  $('.reset-button button').click(reset);
+  $('.onoff-button button').click(setlight);
+
+  // Slider
+  var slider = document.getElementById('brightness');
+  slider.addEventListener('mouseup', updateSlider);
+  slider.addEventListener('touchend', updateSlider);
+  $('.brightness-status span').text(slider.value);
+
+  // World Time Slider
+  slider = document.getElementById('utcs');
+  slider.addEventListener('mouseup', updateutc);
+  slider.addEventListener('touchend', updateutc);
+  $('.utc-status span').text(slider.value);
+
+  $('.showhide').click(function(){
+    $('.advanced').toggle();
+  });
+
+  // Functions
+  function updateSlider() {
+    $('.brightness-status span').text($('#brightness').val());
+    setbright();
+  }
+
+  function updateutc() {
+    var u = $('#utcs').val();
+    $('.utc-status span').text(u - 12);
+    if (document.getElementById('utc').checked == true) {
+      setutc();
+    }
+  }
+
+  function updateReadout(data) {
+    var s = data.split('.');
+    document.getElementById('mode').checked = (s[0] == '1') ? true : false;
+    document.getElementById('bst').checked = (s[1] == '1') ? true : false;
+    document.getElementById('seconds').checked = (s[3] == '1') ? true : false;
+    document.getElementById('flash').checked = (s[2] == '1') ? true : false;
+    document.getElementById('utc').checked = (s[5] == '1') ? true : false;
+    document.getElementById('debug').checked = (s[9] == '1') ? true : false;
+
+    var b = parseInt(s[6]);
+    $('.utc-status span').text(b - 12);
+    $('#utcs').val(b);
+
+    $('.onoff-button button').text((s[7] == '1') ? 'Turn off Display' : 'Turn on Display');
+    displayon = (s[7] == '1');
+
+    b = parseInt(s[4]);
+    $('.brightness-status span').text(b);
+    $('#brightness').val(b);
+
+    updateState(s[8]);
+
+    // Auto-reload data in 120 seconds
+    if (!stateflag) {
+      checkState();
+      stateflag = true;
+    }
+  }
+
+  function updateState(s) {
+    $('.clock-status span').text('This Big Clock is ' + ((s == '0') ? 'offline' : 'online'));
+  }
+
+  function getState(callback) {
+    // Request the current data
+    $.ajax({
+      url : agenturl + '/settings',
+      type: 'GET',
+      success : function(response) {
+        if (callback) {
+          callback(response);
+        }
+      },
+      error : function(xhr, textStatus, error) {
+        if (error) {
+          $('.clock-status span').text(error);
+        }
+      },
+      cache: false
+    });
+  }
+
+  function checkState() {
+    $.ajax({
+      url : agenturl + '/controller/state',
+      type: 'GET',
+      success : function(response) {
+        updateState(response)
+        setTimeout(checkState, 120000);
+      },
+      error : function(xhr, textStatus, error) {
+        if (error) {
+          $('.clock-status span').text(error);
+        }
+      },
+      cache: false
+    });
+  }
+
+  function setmode() {
+    var d = {'setmode' : ((document.getElementById('mode').checked == true) ? '1' : '0')};
+    sendstate(d);
+  }
+
+  function setbst() {
+    var d = {'setbst' : ((document.getElementById('bst').checked == true) ? '1' : '0')};
+    sendstate(d);
+  }
+
+  function setcolon() {
+    var d = {'setcolon' : ((document.getElementById('seconds').checked == true) ? '1' : '0')};
+    sendstate(d);
+  }
+
+  function setflash() {
+    var d = {'setflash' : ((document.getElementById('flash').checked == true) ? '1' : '0')};
+    sendstate(d);
+  }
+
+  function setbright() {
+    var d = {'setbright' : ($('#brightness').val())};
+    sendstate(d);
+  }
+
+  function setlight() {
+    displayon = !displayon;
+    $('.onoff-button button').text(displayon ? 'Turn off Display' : 'Turn on Display');
+    var d = {'setlight' :  (displayon ? '1' : '0')};
+    sendstate(d);
+  }
+
+  function setutc() {
+    var d = {'setutc' : ((document.getElementById('utc').checked == true) ? '1' : '0'), 'utcval' : $('#utcs').val()};
+    sendstate(d);
+  }
+
+  function sendstate(data) {
+    $.ajax({
+      url : agenturl + '/settings',
+      type: 'POST',
+      data: JSON.stringify(data),
+      success: function() {
+        getState(updateReadout);
+      },
+      error : function(xhr, textStatus, error) {
+        if (error) {
+          $('.clock-status span').text(error);
+        }
+      },
+      cache: false
+    });
+  }
+
+  function reset() {
+    // Trigger a settings reset
+    $.ajax({
+      url : agenturl + '/action',
+      type: 'POST',
+      data: JSON.stringify({ 'action' : 'reset' }),
+      success : function(response) {
+        getState(updateReadout);
+      },
+      cache: false
+    });
+  }
+
+  function setdebug() {
+    // Tell the device to enter or leave debug mode
+    $.ajax({
+      url : agenturl + '/action',
+      type: 'POST',
+      data: JSON.stringify({ 'action' : 'debug', 'value' : ((document.getElementById('debug').checked == true) ? '1' : '0') }),
+      error : function(xhr, textStatus, error) {
+        if (error) {
+          $('.clock-status span').text(error);
+        }
+      },
+      cache: false
+    });
+  }
+
+  function reboot() {
+    // Trigger a device restart
+    $.ajax({
+      url : agenturl + '/action',
+      type: 'POST',
+      data: JSON.stringify({ 'action' : 'reboot' }),
+      success : function(response) {
+        getState(updateReadout);
+      },
+      error : function(xhr, textStatus, error) {
+        if (error) {
+          $('.clock-status span').text(error);
+        }
+      },
+      cache: false
+    });
+  }
+  </script>
+</body>
+</html>
