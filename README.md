@@ -1,4 +1,4 @@
-# BigClock 2.3 #
+# BigClock 2.4 #
 
 An Electric Imp-based wall/desktop clock which incorporates a large segment LED display and an RTC.
 
@@ -75,6 +75,8 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Release Notes ##
 
+- 2.4 *unreleased*
+    - Update to [DisconnectionManager 1.1.0](https://github.com/smittytone/generic/blob/master/disconnect.nut).
 - 2.3 *June 13, 2018*
     - Update to [Bootstrap 4.1.1](https://getbootstrap.com/)
         - Update Web UI based on Bootstrap
