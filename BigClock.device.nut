@@ -37,10 +37,11 @@ local day = 0;
 local month = 0;
 local year = 0;
 
-local disTime = -1;
-local disMessage = "";
+//local disTime = -1;
+//local disMessage = "";
 local tickCount = 0;
-local disFlag = false;
+local isDisconnected = false;
+local isConnecting = false;
 local tickFlag = true;
 local debug = true;
 
@@ -139,14 +140,17 @@ function displayTime() {
     }
 
     // Is the clock disconnected? If so, flag the fact
-    if (disFlag) colonValue = colonValue + 0x10;
-
-    if (disFlag && server.isconnected()) {
-        server.log("Whoops! {" + disMessage + "}");
-        disFlag = false;
+    if (isConnecting) {
+      // Flash the disconnection indicator if we're
+      // disconnected and connecting
+      colonValue = colonValue + (!tickFlag ? 0x10 : 0);
+    } else if (isDisconnected) {
+      // Set the disconnection indicator to solid if we're
+      // disconnected but not connecting
+      colonValue = colonValue + 0x10;
     }
 
-        // Check whether the colon should appear
+    // Check whether the colon should appear
     if (settings.colon && (!settings.flash || (settings.flash && tickFlag))) {
         // Colon is set to be displayed. Will it flash?
         colonValue = colonValue + 0x02;
