@@ -71,7 +71,7 @@ Click on **Build and Force Restart** in the impCentral to transfer the code to y
 
 BigClock is is controlled by a web app which you access at the its agent URL.
 
-![UI screengrab](images/grab-01.png)
+<p><img src="images/grab-01.png" width="372" /></p>
 
 ## Release Notes ##
 
