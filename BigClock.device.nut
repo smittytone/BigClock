@@ -269,8 +269,9 @@ function setLight(value) {
     }
 }
 
-function setDebug(ds) {
-    debug = ds;
+function setDebug(state) {
+    debug = state;
+    clock.setDebug(state);
     server.log("BigClock debug " + ((debug) ? "enabled" : "disabled"));
 }
 
@@ -329,7 +330,7 @@ rtc.init();
 
 // Set up the display
 hardware.i2c89.configure(CLOCK_SPEED_50_KHZ);
-clock = HT16K33SegmentBig(hardware.i2c89, 0x70, debug);
+clock = HT16K33SegmentBig(hardware.i2c89, 0x70);
 clock.init();
 
 // Show the ‘sync’ message then give the text no more than
