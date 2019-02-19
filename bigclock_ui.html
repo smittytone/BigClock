@@ -60,32 +60,26 @@
                 <div class='row' align='left'>
                     <div class='col-2'>&nbsp;</div>
                     <div class='col-8'>
-                        <h4 align='center'>Time Settings</h4>
-                            <label class='checkarea'> 24-Hour Mode (Switch off for AM/PM)
-                                <input type='checkbox' name='mode' id='mode' value='mode' /><span class='checkmark'></span>
-                            </label>
-                            <label class='checkarea'> Apply Daylight Savings Time Automatically
-                                <input type='checkbox' name='bst' id='bst' value='bst' /><span class='checkmark'></span>
-                            </label>
-                            <p class='subhead text-center'>World Time</p>
-                            <label class='checkarea utc-checkbox'> Show World Time
-                                <input type='checkbox' name='utc' id='utc' value='utc' /><span class='checkmark'></span>
-                            </label>
-                            <input type='range' class='slider' name='utcs' id='utcs' value='0' min='0' max='24'>
-                            <table width='100%%'><tr>
-                                <td width='20%%' align='left'><small>-12</small></td>
-                                <td width='60%%' align='center'><small>0</small></td>
-                                <td width='20%%' align='right'><small>+12</small></td>
-                            </tr></table>
-                            <p class='utc-status subslider' align='center'>Offset from local time: <span></span> hours</p>
+                        <h4 align='center'>Settings</h4>
+                            <div class='row' align='left'>
+                                <div class='col-6'>
+                                    <label class='checkarea'> 24-Hour Mode (Switch off for AM/PM)
+                                        <input type='checkbox' name='mode' id='mode' value='mode' /><span class='checkmark'></span>
+                                    </label>
+                                    <label class='checkarea utc-checkbox'> Show World Time
+                                        <input type='checkbox' name='utc' id='utc' value='utc' /><span class='checkmark'></span>
+                                    </label>
+                                </div>
+                                <div class='col-6'>
+                                    <label class='checkarea'> Show Seconds Indicator
+                                        <input type='checkbox' name='seconds' id='seconds' value='seconds' /><span class='checkmark'></span>
+                                    </label>
+                                    <label class='checkarea'> Flash Seconds Indicator
+                                        <input type='checkbox' name='flash' id='flash' value='seconds'><span class='checkmark' /></span>
+                                    </label>
+                                </div>
+                            </div>
                             <hr />
-                            <h4 align='center'>Display Settings</h4>
-                            <label class='checkarea'> Show Seconds Indicator
-                                <input type='checkbox' name='seconds' id='seconds' value='seconds' /><span class='checkmark'></span>
-                            </label>
-                            <label class='checkarea'> Flash Seconds Indicator
-                                <input type='checkbox' name='flash' id='flash' value='seconds'><span class='checkmark' /></span>
-                            </label>
                             <p class='subhead text-center'>Brightness</p>
                             <input type='range' class='slider' name='brightness' id='brightness' value='16' min='1' max='16'>
                             <table width='100%%'><tr>
@@ -94,6 +88,16 @@
                                 <td width='20%%' align='right'><small>High</small></td>
                             </tr></table>
                             <p class='brightness-status subslider' align='center'>Current brightness: <span></span><br />&nbsp;</p>
+                            <hr />
+                            <p class='utc-head subhead text-center'>World Time (<span>Disabled</span>)</p>
+                            <input type='range' class='slider' name='utcs' id='utcs' value='0' min='0' max='24'>
+                            <table width='100%%'><tr>
+                                <td width='20%%' align='left'><small>-12</small></td>
+                                <td width='60%%' align='center'><small>0</small></td>
+                                <td width='20%%' align='right'><small>+12</small></td>
+                            </tr></table>
+                            <p class='utc-status subslider' align='center'>Offset from local time: <span></span> hours</p>
+                            <hr />
                             <div class='onoff-button' align='center'>
                                 <button type='submit' class='btn btn-danger' id='onoff' style='width:200px'>Turn off Display</button>
                             </div>
@@ -102,8 +106,12 @@
                                 <p class='showhide text-center' style='line-height:36px;'>Advanced Settings</h4>
                                 <div class='advanced' align='center'>
                                     <br />
+                                    <div class='bst-checkbox' style='font-family:Comfortaa, sans-serif'>
+                                        <input type='checkbox' name='bst' id='bst' value='bst' /> Apply Daylight Savings Time Automatically
+                                    </div>
+                                    
                                     <div class='debug-checkbox' style='font-family:Comfortaa, sans-serif'>
-                                        <input type='checkbox' name='debug' id='debug' value='debug' /> Debug Mode
+                                        <input type='checkbox' name='debug' id='debug' value='debug' /> Log Extra Debug Information
                                     </div>
                                     <br />
                                     <div class='reset-button' align='center'>
@@ -180,6 +188,7 @@
 
             var b = parseInt(s[6]);
             $('.utc-status span').text(b - 12);
+            $('.utc-head span').text(document.getElementById('utc').checked ? 'Enabled' : 'Disabled');
             $('#utcs').val(b);
 
             $('.onoff-button button').text((s[7] == '1') ? 'Turn off Display' : 'Turn on Display');
