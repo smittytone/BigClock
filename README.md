@@ -1,4 +1,4 @@
-# BigClock 2.4 #
+# BigClock 2.4.0 #
 
 An Electric Imp-based wall/desktop clock which incorporates a large segment LED display and an RTC.
 
@@ -75,9 +75,12 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Release Notes ##
 
-- 2.4.0 *In Development*
-    Update to [Bootstrap 4.1.3](https://getbootstrap.com/)
-    - Update to latest [DisconnectionManager](https://github.com/smittytone/generic/blob/master/disconnect.nut).
+- 2.4.0 *Unreleased*
+    - Refactor Web UI JavaScript
+    - Update dependencies:
+        - Bootstrap 4.3.0
+        - HT16K33SegmentBig 2.0.0
+        - Rocky 2.0.0
 - 2.3.0 *June 13, 2018*
     - Update to [Bootstrap 4.1.1](https://getbootstrap.com/)
         - Update Web UI based on Bootstrap

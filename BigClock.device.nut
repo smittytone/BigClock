@@ -1,14 +1,16 @@
 // Big Clock
-// Copyright 2014-18, Tony Smith
+// Copyright 2014-19, Tony Smith
 
-// IMPORTS
-#import "../generic/utilities.nut"
-#import "../generic/disconnect.nut"
-#import "../DS3234/ds3234rtc.class.nut"
-#import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"
+// ********** IMPORTS **********
+// If you are NOT using Squinter or a similar tool, replace the following #import statement(s)
+// with the contents of the named file(s):
+#import "../generic/utilities.nut"                              // Source code: https://github.com/smittytone/generic
+#import "../generic/disconnect.nut"                             // Source code: https://github.com/smittytone/generic
+#import "../DS3234/ds3234rtc.class.nut"                         // Source code: https://github.com/smittytone/BigClock
+#import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"      // Source code: https://github.com/smittytone/HT16K33SegmentBig
 
 
-// CONSTANTS
+// ********** CONSTANTS **********
 // These values are not user definable, so set as constants to save
 // calculation time and memory:
 //   1. TICK_DURATION = fraction of a second that each tick takes
@@ -22,7 +24,7 @@ const DISCONNECT_TIMEOUT = 60;
 const RECONNECT_TIMEOUT = 30;
 const SYNC_TIME = 15;
 
-// GLOBALS
+// ********** GLOBAL VARIABLES **********
 local rtc = null;
 local clock = null;
 local syncTimer = null;
@@ -43,9 +45,9 @@ local tickCount = 0;
 local isDisconnected = false;
 local isConnecting = false;
 local tickFlag = true;
-local debug = true;
 
-// TIME FUNCTIONS
+
+// ********** TIME FUNCTIONS **********
 function getTime() {
     // This is the main clock loop
     // Queue the function to run again in TICK_DURATION seconds
@@ -66,7 +68,7 @@ function getTime() {
 
     // Update for world time
     if (settings.utc) {
-        hour = hour + settings.offset;
+        hour = hour + settings.utcoffset;
     }
 
     if (hour > 23) hour = 0;
@@ -170,19 +172,17 @@ function syncText() {
     clock.updateDisplay();
 }
 
-// PREFERENCES FUNCTIONS
-function setInitialTime(firstTime) {
+// ********** PREFERENCES FUNCTIONS **********
+function setInitialTime(ignored) {
     // Set the RTC using the server time
-    if (firstTime) {
-        if (debug) server.log("Setting RTC with initial time via server");
-        local now = date();
-        rtc.setDateAndTime(now.day + 1, now.month + 1, now.year, now.wday + 1, now.hour, now.min, now.sec);
-    }
+    if (settings.debug) server.log("Setting RTC with initial time via server");
+    local now = date();
+    rtc.setDateAndTime(now.day + 1, now.month + 1, now.year, now.wday + 1, now.hour, now.min, now.sec);
 }
 
 function setPrefs(prefs) {
     // Cancel the 'Sync' display timer if it has yet to fire
-    if (debug) server.log("Received preferences from agent");
+    if (settings.debug) server.log("Received preferences from agent");
     if (syncTimer) imp.cancelwakeup(syncTimer);
     syncTimer = null;
 
@@ -192,7 +192,8 @@ function setPrefs(prefs) {
     settings.flash = prefs.flash;
     settings.colon = prefs.colon;
     settings.utc = prefs.utc;
-    settings.offset = prefs.offset;
+    settings.utcoffset = prefs.offset;
+    settings.debug = prefs.debug;
 
     // Clear the display
     if (prefs.on != settings.on) {
@@ -215,31 +216,26 @@ function setPrefs(prefs) {
 
 function setBST(value) {
     // This function is called when the app sets or unsets BST
-    if (debug) server.log("Setting BST auto-monitoring " + ((value) ? "on" : "off"));
+    if (settings.debug) server.log("Setting BST auto-monitoring " + (value ? "on" : "off"));
     settings.bst = value;
 }
 
 function setMode(value) {
     // This function is called when 12/24 modes are switched by app
-    if (debug) server.log("Setting 24-hour mode " + ((value) ? "on" : "off"));
+    if (settings.debug) server.log("Setting 24-hour mode " + (value ? "on" : "off"));
     settings.mode = value;
 }
 
 function setUTC(value) {
     // This function is called when the app sets or unsets UTC
-    if (debug) server.log("Setting UTC " + ((string == "N") ? "on" : "off"));
-    if (value == "N") {
-        settings.utc = false;
-    } else {
-        // NOTE 'value' is an integer if it's not "N"
-        settings.utc = true;
-        settings.offset = value;
-    }
+    if ("offset" in value) settings.utcoffset = value.offset;
+    if ("state" in value) settings.utc = value.state;
+    if (settings.debug) server.log("Setting UTC " + (value.state ? "on" : "off") + " with offset " + value.offset);
 }
 
 function setBright(brightness) {
     // This function is called when the app changes the clock's brightness
-    if (debug) server.log("Setting brightness " + brightness);
+    if (settings.debug) server.log("Setting brightness " + brightness);
     if (brightness != settings.brightness) {
         clock.setBrightness(brightness);
         settings.brightness = brightness;
@@ -248,18 +244,18 @@ function setBright(brightness) {
 
 function setFlash(value) {
     // This function is called when the app sets or unsets the colon flash
-    if (debug) server.log("Setting colon flash " + ((value) ? "on" : "off"));
+    if (settings.debug) server.log("Setting colon flash " + (value ? "on" : "off"));
     settings.flash = value;
 }
 
 function setColon(value) {
     // This function is called when the app sets or unsets the colon flash
-    if (debug) server.log("Setting colon state " + ((value) ? "on" : "off"));
+    if (settings.debug) server.log("Setting colon state " + (value ? "on" : "off"));
     settings.colon = value;
 }
 
 function setLight(value) {
-    if (debug) server.log("Setting light " + ((value) ? "on" : "off"));
+    if (settings.debug) server.log("Setting light " + (value ? "on" : "off"));
     settings.on = value;
 
     if (value) {
@@ -270,16 +266,16 @@ function setLight(value) {
 }
 
 function setDebug(state) {
-    debug = state;
-    clock.setDebug(state);
-    server.log("BigClock debug " + ((debug) ? "enabled" : "disabled"));
+    settings.debug = state;
+    // clock.setDebug(state);
+    server.log("BigClock debug " + (settings.debug ? "enabled" : "disabled"));
 }
 
 
-// OFFLINE OPERATION FUNCTIONS
-function discHandler(event) {
+// ********** OFFLINE OPERATION FUNCTIONS **********
+function discoHandler(event) {
     // Called if the server connection is broken or re-established
-    if ("message" in event && debug) server.log("Disconnection Manager: " + event.message);
+    if ("message" in event && settings.debug) server.log("Disconnection Manager: " + event.message);
 
     if ("type" in event) {
         if (event.type == "disconnected") {
@@ -298,8 +294,7 @@ function discHandler(event) {
 }
 
 
-// MISC FUNCTIONS
-
+// ********** MISC FUNCTIONS **********
 function resetSettings() {
     settings = {};
     settings.on <- true;
@@ -307,19 +302,22 @@ function resetSettings() {
     settings.bst <- true;   // NOTE This now indicates whether we adapt to BST (true) or stick to GMT (false)
     settings.colon <- true;
     settings.flash <- true;
-    settings.brightness <- 15;
+    settings.brightness <- 7;
     settings.utc <- false;
-    settings.offset <- 12;
+    settings.utcoffset <- 12;
+    settings.debug <- false;
 }
 
 
-// START
+// ********** RUNTIME START **********
 
 // Load in generic boot message code
-#include "../generic/bootmessage.nut"
+// If you are NOT using Squinter or a similar tool, replace the following #import statement(s)
+// with the contents of the named file(s):
+#import "../generic/bootmessage.nut"        // Source code: https://github.com/smittytone/generic
 
 // Set up the disconnection manager
-disconnectionManager.eventCallback = discHandler;
+disconnectionManager.eventCallback = discoHandler;
 disconnectionManager.reconnectTimeout = RECONNECT_TIMEOUT;
 disconnectionManager.reconnectDelay = DISCONNECT_TIMEOUT;
 disconnectionManager.start();
@@ -353,4 +351,5 @@ agent.on("bclock.first.time", setInitialTime);
 agent.on("bclock.set.debug", setDebug);
 
 // Get preferences from server
-agent.send("bclock.get.prefs", true);
+// FROM 2.4.0: comment out as this is handled by the disconnect manager
+// agent.send("bclock.get.prefs", true);
