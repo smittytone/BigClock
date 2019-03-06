@@ -75,12 +75,9 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Release Notes ##
 
-- 2.4.0 *Unreleased*
+- 2.4.0 *6 March 2019*
     - Refactor Web UI JavaScript
-    - Update dependencies:
-        - Bootstrap 4.3.0
-        - HT16K33SegmentBig 2.0.0
-        - Rocky 2.0.0
+    - Update dependencies: Bootstrap 4.3.0, HT16K33SegmentBig 2.0.0, Rocky 2.0.2
 - 2.3.0 *June 13, 2018*
     - Update to [Bootstrap 4.1.1](https://getbootstrap.com/)
         - Update Web UI based on Bootstrap
@@ -93,4 +90,4 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Licence ##
 
-The BigClock code and design is copyright &copy; 2014-2018 Tony Smith and licensed under the terms of the [MIT Licence](LICENSE).
+The BigClock code and design is copyright &copy; 2014-2019 Tony Smith and licensed under the terms of the [MIT Licence](LICENSE).
