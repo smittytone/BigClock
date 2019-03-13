@@ -1,4 +1,4 @@
-# BigClock 2.4.0 #
+# BigClock 2.4.1 #
 
 An Electric Imp-based wall/desktop clock which incorporates a large segment LED display and an RTC.
 
@@ -75,17 +75,19 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Release Notes ##
 
-- 2.4.0 *6 March 2019*
+- 2.4.1 &mdash; *unreleased*
+    - Add [crash reporting](https://github.com/smittytone/generic)
+- 2.4.0 &mdash; *6 March 2019*
     - Refactor Web UI JavaScript
     - Update dependencies: Bootstrap 4.3.0, HT16K33SegmentBig 2.0.0, Rocky 2.0.2
-- 2.3.0 *June 13, 2018*
+- 2.3.0 &mdash; *June 13, 2018*
     - Update to [Bootstrap 4.1.1](https://getbootstrap.com/)
         - Update Web UI based on Bootstrap
         - Separate out Web UI into own file for clarity
     - Add support for [Location class 1.5.0](https://github.com/smittytone/Location)
-    - Add support for [serial logging](https://github.com/smittytone/generic/blob/master/seriallog.nut)
+    - Add support for [serial logging](https://github.com/smittytone/generic)
     - Update to [JQuery 3.3.1](https://jquery.com)
-    - Prevent Ajax XHR cacheing
+    - Prevent Ajax XHR caching
     - Add preliminary support for polite deployment
 
 ## Licence ##

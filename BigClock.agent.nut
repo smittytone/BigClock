@@ -8,12 +8,14 @@
 #import "~/Dropbox/Programming/Imp/Codes/bigclock.nut"
 // ...and uncomment and fill in this line:
 // const APP_CODE = "YOUR_APP_UUID";
+#import "../generic/simpleslack.nut"        // Source: https://github.com/smittytone/generic
+#import "../generic/crashReporter.nut"      // Source: https://github.com/smittytone/generic
 
 // If you are NOT using Squinter or a similar tool, replace the following #import statement(s)
 // with the contents of the named file(s):
 const HTML_STRING = @"
 #import "bigclock_ui.html"
-";                              // Source code: https://github.com/smittytone/BigClock
+";                                          // Source code: https://github.com/smittytone/BigClock
 
 
 // ********** CONSTANTS **********
@@ -151,6 +153,10 @@ function debugAPI(context, next) {
 
 
 // ********** RUNTIME START **********
+
+// ADDED IN 2.4.1
+// Load up the crash reporter
+#import "~/Dropbox/Programming/Imp/codes/slack.nut"
 
 // IMPORTANT Set firstRun at the top of the listing to reset saved settings
 if (firstRun) resetToDefaults();

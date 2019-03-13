@@ -6,6 +6,7 @@
 // with the contents of the named file(s):
 #import "../generic/utilities.nut"                              // Source code: https://github.com/smittytone/generic
 #import "../generic/disconnect.nut"                             // Source code: https://github.com/smittytone/generic
+#import "../generic/crashreporter.nut"                          // Source code: https://github.com/smittytone/generic
 #import "../DS3234/ds3234rtc.class.nut"                         // Source code: https://github.com/smittytone/BigClock
 #import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"      // Source code: https://github.com/smittytone/HT16K33SegmentBig
 
@@ -310,6 +311,10 @@ function resetSettings() {
 
 
 // ********** RUNTIME START **********
+
+// ADDED IN 2.4.1
+// Set up the crash reporter
+crashReporter.init();
 
 // Load in generic boot message code
 // If you are NOT using Squinter or a similar tool, replace the following #import statement(s)
