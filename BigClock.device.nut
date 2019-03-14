@@ -332,7 +332,7 @@ rtc = DS3234RTC(hardware.spi257, hardware.pin1);
 rtc.init();
 
 // Set up the display
-hardware.i2c89.configure(CLOCK_SPEED_50_KHZ);
+hardware.i2c89.configure(CLOCK_SPEED_10_KHZ);
 clock = HT16K33SegmentBig(hardware.i2c89, 0x70);
 clock.init();
 
