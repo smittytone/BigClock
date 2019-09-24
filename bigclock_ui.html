@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
     <title>Big Clock</title>
-    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
     <link href='https://fonts.googleapis.com/css?family=Rubik|Monofett|Comfortaa' rel='stylesheet'>
     <link rel='apple-touch-icon' href='https://smittytone.github.io/images/ati-bclock.png'>
     <link rel='shortcut icon' href='https://smittytone.github.io/images/ico-bclock.ico' />
@@ -109,7 +109,7 @@
                                     <div class='bst-checkbox' style='font-family:Comfortaa, sans-serif'>
                                         <input type='checkbox' name='bst' id='bst' value='bst' /> Apply Daylight Savings Time Automatically
                                     </div>
-                                    
+
                                     <div class='debug-checkbox' style='font-family:Comfortaa, sans-serif'>
                                         <input type='checkbox' name='debug' id='debug' value='debug' /> Log Extra Debug Information
                                     </div>
@@ -128,15 +128,14 @@
                 <div class='row' align='center'>
                     <div class='col'>
                         <p class='colophon'>Big Clock &copy; 2014-19 Tony Smith<br />
-                        <a href='https://github.com/smittytone/BigClock' target='_blank'>
-                        <img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32' /></a></p>
+                        <a href='https://github.com/smittytone/BigClock'><img src='https://smittytone.github.io/images/rassilonblack.png' width='32' height='32' /></a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <script>
         $('.advanced').hide();
 
@@ -219,7 +218,7 @@
                 setUtc();
             }
         }
-  
+
         function updateState(s) {
             $('.clock-status span').text('This Big Clock is ' + ((s == '0') ? 'offline' : 'online'));
         }
@@ -326,7 +325,7 @@
                         $('.clock-status span').text(error);
                     }
                 }
-            }); 
+            });
         }
     </script>
 </body>
