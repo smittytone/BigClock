@@ -40,8 +40,6 @@ local day = 0;
 local month = 0;
 local year = 0;
 
-//local disTime = -1;
-//local disMessage = "";
 local tickCount = 0;
 local isDisconnected = false;
 local isConnecting = false;
@@ -55,14 +53,7 @@ function getTime() {
     tickTimer = imp.wakeup(TICK_DURATION, getTime);
 
     // Get the current time from the RTC and store parameters
-    local time = rtc.getDateAndTime();
-    seconds = time[0];
-    minutes = time[1];
-    hour = time[2];
-    dayw = time[3];
-    day = time[4] - 1;
-    month = time[5];
-    year = time[6];
+    setTime();
 
     // Adjust the hour for BST and midnight rollover
     if (settings.bst && utilities.bstCheck()) hour++;
@@ -83,6 +74,30 @@ function getTime() {
 
     // Present the current time
     displayTime();
+}
+
+function setTime() {
+    // Get the current time from the RTC and store parameters
+
+    local time = rtc.getDateAndTime();
+    seconds = time[0];
+    minutes = time[1];
+    hour = time[2];
+    dayw = time[3];
+    day = time[4] - 1;
+    month = time[5];
+    year = time[6];
+
+    /*
+    local time = date();
+    seconds = time.sec;
+    minutes = time.min;
+    hour = time.hour;
+    dayw = time.wday;
+    day = time.day;
+    month = time.month;
+    year = time.year;
+    */
 }
 
 function displayTime() {
