@@ -73,33 +73,33 @@ function appResponse() {
     if (settings.mode == true) rs = "1.";
 
     // Add BST status as a 1-digit value
-    rs = rs + ((settings.bst) ? "1." : "0.");
+    rs += ((settings.bst) ? "1." : "0.");
 
     // Add colon flash status as a 1-digit value
-    rs = rs + ((settings.flash) ? "1." : "0.");
+    rs += ((settings.flash) ? "1." : "0.");
 
     // Add colon state as a 1-digit value
-    rs = rs + ((settings.colon) ? "1." : "0.");
+    rs += ((settings.colon) ? "1." : "0.");
 
     // Add brightness as a two-digit value
     local b = settings.brightness + 1;
-    rs = rs + b.tostring() + ".";
+    rs += (b.tostring() + ".");
 
     // Add UTC status as a 1-digit value
-    rs = rs + ((settings.utc) ? "1." : "0.");
+    rs += ((settings.utc) ? "1." : "0.");
 
     // Add UTC offset
     local s = settings.offset + 12;
-    rs = rs + s.tostring() + ".";
+    rs += (s.tostring() + ".");
 
 	// Add clock state as 1-digit value
-	rs = rs + ((settings.on) ? "1." : "0.");
+	rs += ((settings.on) ? "1." : "0.");
 
     // Add d to indicate disconnected, or c
-    rs = rs + (device.isconnected() ? "c." : "d.");
+    rs += (device.isconnected() ? "c." : "d.");
 
     // Add debug state
-    rs = rs + (settings.debug ? "1" : "0");
+    rs += (settings.debug ? "1" : "0");
 
     return rs;
 }
@@ -146,7 +146,7 @@ function debugAPI(context, next) {
         server.log("API received a request at " + time() + ": " + context.req.method.toupper() + " @ " + context.req.path.tolower());
         if (context.req.rawbody.len() > 0) server.log("Request body: " + context.req.rawbody.tolower());
     }
-    
+
     // Invoke the next middleware
     next();
 }
@@ -236,7 +236,7 @@ api.post("/settings", function(context) {
                     error = reportAPIError("setbst");
                     break;
                 }
-                
+
                 settings.bst = value;
                 device.send("bclock.set.bst", settings.bst);
                 if (settings.debug) server.log("UI says turn auto BST observance " + (settings.bst ? "on" : "off"));
@@ -249,7 +249,7 @@ api.post("/settings", function(context) {
                     error = reportAPIError("setcolon");
                     break;
                 }
-                
+
                 settings.colon = value;
                 device.send("bclock.set.colon", settings.colon);
                 if (settings.debug) server.log("UI says turn colon " + (settings.colon ? "on" : "off"));
@@ -262,7 +262,7 @@ api.post("/settings", function(context) {
                     error = reportAPIError("setflash");
                     break;
                 }
-                
+
                 settings.flash = value;
                 device.send("bclock.set.flash", settings.flash);
                 if (settings.debug) server.log("UI says turn colon flashing " + (settings.flash ? "on" : "off"));
@@ -330,6 +330,21 @@ api.post("/settings", function(context) {
                 device.send("bclock.set.utc", {"state" : settings.utc, "offset" : settings.offset});
                 if (settings.debug) server.log("UI says turn world time mode " + (settings.utc ? "on" : "off") + ", offset: " + settings.offset);
             }
+
+            // FROM 2.4.1
+            // Check for set rtc message (value arrives as a bool)
+            // eg. { "setrtc" : true }
+            if (setting == "setrtc") {
+                // Check that the conversion to bool works
+                if (typeof value != "bool") {
+                    error = reportAPIError("setrtc");
+                    break;
+                }
+
+                rtc = value;
+                device.send("bclock.set.rtc", rtc);
+                if (settings.debug) server.log("UI says switch RTC to " + (rtc ? "external" : "internal"));
+            }
         }
 
         if (error != null) {
@@ -388,4 +403,3 @@ api.get("/controller/state", function(context) {
     local data = (device.isconnected() ? "1" : "0");
     context.send(200, data);
 });
-

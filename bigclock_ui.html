@@ -109,7 +109,6 @@
                                     <div class='bst-checkbox' style='font-family:Comfortaa, sans-serif'>
                                         <input type='checkbox' name='bst' id='bst' value='bst' /> Apply Daylight Savings Time Automatically
                                     </div>
-
                                     <div class='debug-checkbox' style='font-family:Comfortaa, sans-serif'>
                                         <input type='checkbox' name='debug' id='debug' value='debug' /> Log Extra Debug Information
                                     </div>
@@ -154,6 +153,7 @@
         $('#flash').click(setFlash);
         $('#utc').click(setUtc);
         $('#debug').click(setDebug);
+        $('#rtc').click(setRtc);
 
         // Buttons
         $('#reset').click(doReset);
@@ -293,6 +293,10 @@
         function setUtc() {
             sendState({'setutc' : { 'state': document.getElementById('utc').checked,
                                     'offset' : $('#utcs').val()}});
+        }
+
+        function setRtc() {
+            sendState({'setrtc' : document.getElementById('rtc').checked});
         }
 
         function sendState(data) {

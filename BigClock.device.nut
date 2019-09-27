@@ -78,26 +78,26 @@ function getTime() {
 
 function setTime() {
     // Get the current time from the RTC and store parameters
-
-    local time = rtc.getDateAndTime();
-    seconds = time[0];
-    minutes = time[1];
-    hour = time[2];
-    dayw = time[3];
-    day = time[4] - 1;
-    month = time[5];
-    year = time[6];
-
-    /*
-    local time = date();
-    seconds = time.sec;
-    minutes = time.min;
-    hour = time.hour;
-    dayw = time.wday;
-    day = time.day;
-    month = time.month;
-    year = time.year;
-    */
+    // FROM 2.4.1: switchable RTC (external or internal)
+    if (settings.rtc) {
+        local time = rtc.getDateAndTime();
+        seconds = time[0];
+        minutes = time[1];
+        hour = time[2];
+        dayw = time[3];
+        day = time[4] - 1;
+        month = time[5];
+        year = time[6];
+    } else {
+        local time = date();
+        seconds = time.sec;
+        minutes = time.min;
+        hour = time.hour;
+        dayw = time.wday;
+        day = time.day;
+        month = time.month;
+        year = time.year;
+    }
 }
 
 function displayTime() {
@@ -287,6 +287,12 @@ function setDebug(state) {
     server.log("BigClock debug " + (settings.debug ? "enabled" : "disabled"));
 }
 
+function setRtc(state) {
+    settings.rtc = state;
+    // clock.setDebug(state);
+    server.log("BigClock RTC: " + (settings.debug ? "external" : "internal"));
+}
+
 
 // ********** OFFLINE OPERATION FUNCTIONS **********
 function discoHandler(event) {
@@ -322,6 +328,7 @@ function resetSettings() {
     settings.utc <- false;
     settings.utcoffset <- 12;
     settings.debug <- false;
+    settings.rtc <- false;
 }
 
 
@@ -369,6 +376,8 @@ agent.on("bclock.set.colon", setColon);
 agent.on("bclock.set.light", setLight);
 agent.on("bclock.first.time", setInitialTime);
 agent.on("bclock.set.debug", setDebug);
+// FROM 2.4.1: add RTC switch
+agent.on("bclock.set.rst", setRtc);
 
 // Get preferences from server
 // FROM 2.4.0: comment out as this is handled by the disconnect manager
