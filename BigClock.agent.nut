@@ -2,7 +2,7 @@
 // Copyright 2014-19, Tony Smith
 
 // ********** IMPORTS **********
-#require "Rocky.class.nut:2.0.2"
+#require "Rocky.agent.lib.nut:3.0.0"
 
 // If you are NOT using Squinter or a similar tool, comment out the following line...
 #import "~/Dropbox/Programming/Imp/Codes/bigclock.nut"
@@ -144,7 +144,7 @@ function debugAPI(context, next) {
         server.log("API received a request at " + time() + ": " + context.req.method.toupper() + " @ " + context.req.path.tolower());
         if (context.req.rawbody.len() > 0) server.log("Request body: " + context.req.rawbody.tolower());
     }
-    
+
     // Invoke the next middleware
     next();
 }
@@ -177,7 +177,7 @@ if (savedSettings.len() != 0) {
 device.on("bclock.get.prefs", sendPrefsToDevice);
 
 // Set up the API
-api = Rocky();
+api = Rocky.init();
 api.use(debugAPI);
 
 // Set up UI access security: HTTPS only
@@ -230,7 +230,7 @@ api.post("/settings", function(context) {
                     error = reportAPIError("setbst");
                     break;
                 }
-                
+
                 settings.bst = value;
                 device.send("bclock.set.bst", settings.bst);
                 if (settings.debug) server.log("UI says turn auto BST observance " + (settings.bst ? "on" : "off"));
@@ -243,7 +243,7 @@ api.post("/settings", function(context) {
                     error = reportAPIError("setcolon");
                     break;
                 }
-                
+
                 settings.colon = value;
                 device.send("bclock.set.colon", settings.colon);
                 if (settings.debug) server.log("UI says turn colon " + (settings.colon ? "on" : "off"));
@@ -256,7 +256,7 @@ api.post("/settings", function(context) {
                     error = reportAPIError("setflash");
                     break;
                 }
-                
+
                 settings.flash = value;
                 device.send("bclock.set.flash", settings.flash);
                 if (settings.debug) server.log("UI says turn colon flashing " + (settings.flash ? "on" : "off"));
@@ -382,4 +382,3 @@ api.get("/controller/state", function(context) {
     local data = (device.isconnected() ? "1" : "0");
     context.send(200, data);
 });
-
