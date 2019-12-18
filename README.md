@@ -75,7 +75,7 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Release Notes ##
 
-- 2.4.2 &mdash; *Unreleased*
+- 2.4.2 &mdash; *18 December 2019*
     - Add [crash reporting](https://github.com/smittytone/generic)
     - Update dependencies: Bootstrap 4.3.1, JQuery 3.4.1
     - Initial work on supporting internal or external RTC
