@@ -5,7 +5,7 @@
 #require "Rocky.agent.lib.nut:3.0.0"
 
 // If you are NOT using Squinter or a similar tool, comment out the following line...
-#import "~/Dropbox/Programming/Imp/Codes/bigclock.nut"
+#import "~/OneDrive/Programming/BigClock/bigclock.nut"
 // ...and uncomment and fill in this line:
 // const APP_CODE = "YOUR_APP_UUID";
 #import "../generic/simpleslack.nut"        // Source: https://github.com/smittytone/generic
