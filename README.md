@@ -1,4 +1,4 @@
-# BigClock 2.4.2 #
+# BigClock 2.4.3 #
 
 An Electric Imp-based wall/desktop clock which incorporates a large segment LED display and an RTC.
 
@@ -75,16 +75,20 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Release Notes ##
 
-- 2.4.2 &mdash; *18 December 2019*
+- 2.4.3 *21 may 2020*
+    - Update to JQuery 3.5.x.
+    - Update to Bootstrap 4.5.x.
+    - Update included repo names.
+- 2.4.2 *18 December 2019*
     - Add [crash reporting](https://github.com/smittytone/generic)
     - Update dependencies: Bootstrap 4.3.1, JQuery 3.4.1
     - Initial work on supporting internal or external RTC
 - 2.4.1 *17 December 2019*
     - Support Rocky 3.0.0.
-- 2.4.0 &mdash; *6 March 2019*
+- 2.4.0 *6 March 2019*
     - Refactor Web UI JavaScript
     - Update dependencies: Bootstrap 4.3.0, HT16K33SegmentBig 2.0.0, Rocky 2.0.2
-- 2.3.0 &mdash; *June 13, 2018*
+- 2.3.0 *13 June 2018*
     - Update to [Bootstrap 4.1.1](https://getbootstrap.com/)
         - Update Web UI based on Bootstrap
         - Separate out Web UI into own file for clarity
@@ -96,4 +100,4 @@ BigClock is is controlled by a web app which you access at the its agent URL.
 
 ## Licence ##
 
-The BigClock code and design is copyright &copy; 2014-2019 Tony Smith and licensed under the terms of the [MIT Licence](LICENSE).
+The BigClock code and design is copyright &copy; 2014-2020 Tony Smith and licensed under the terms of the [MIT Licence](LICENSE).

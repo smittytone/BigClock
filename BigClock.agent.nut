@@ -8,8 +8,8 @@
 #import "~/OneDrive/Programming/BigClock/bigclock.nut"
 // ...and uncomment and fill in this line:
 // const APP_CODE = "YOUR_APP_UUID";
-#import "../generic/simpleslack.nut"        // Source: https://github.com/smittytone/generic
-#import "../generic/crashReporter.nut"      // Source: https://github.com/smittytone/generic
+#import "../generic-squirrel/simpleslack.nut"        // Source: https://github.com/smittytone/generic-squirrel
+#import "../generic-squirrel/crashReporter.nut"      // Source: https://github.com/smittytone/generic-squirrel
 
 // If you are NOT using Squinter or a similar tool, replace the following #import statement(s)
 // with the contents of the named file(s):
@@ -156,7 +156,7 @@ function debugAPI(context, next) {
 
 // ADDED IN 2.4.1
 // Load up the crash reporter
-#import "~/Dropbox/Programming/Imp/codes/slack.nut"
+#import "~/OneDrive/Programming/Generic/slack.nut"
 
 // IMPORTANT Set firstRun at the top of the listing to reset saved settings
 if (firstRun) resetToDefaults();

@@ -4,11 +4,11 @@
 // ********** IMPORTS **********
 // If you are NOT using Squinter or a similar tool, replace the following #import statement(s)
 // with the contents of the named file(s):
-#import "../generic/utilities.nut"                              // Source code: https://github.com/smittytone/generic
-#import "../generic/disconnect.nut"                             // Source code: https://github.com/smittytone/generic
-#import "../generic/crashreporter.nut"                          // Source code: https://github.com/smittytone/generic
-#import "../DS3234/ds3234rtc.class.nut"                         // Source code: https://github.com/smittytone/BigClock
-#import "../HT16K33SegmentBig/ht16k33segmentbig.class.nut"      // Source code: https://github.com/smittytone/HT16K33SegmentBig
+#import "../generic-squirrel/utilities.nut"                             // Source code: https://github.com/smittytone/generic-squirrel
+#import "../generic-squirrel/disconnect.nut"                            // Source code: https://github.com/smittytone/generic-squirrel
+#import "../generic-squirrel/crashreporter.nut"                         // Source code: https://github.com/smittytone/generic-squirrel
+#import "../DS3234/ds3234rtc.class.nut"                                 // Source code: https://github.com/smittytone/BigClock
+#import "../HT16K33SegmentBig-Squirrel/ht16k33segmentbig.class.nut"     // Source code: https://github.com/smittytone/HT16K33SegmentBig-Squirrel
 
 
 // ********** CONSTANTS **********
@@ -341,7 +341,7 @@ crashReporter.init();
 // Load in generic boot message code
 // If you are NOT using Squinter or a similar tool, replace the following #import statement(s)
 // with the contents of the named file(s):
-#import "../generic/bootmessage.nut"        // Source code: https://github.com/smittytone/generic
+#import "../generic-squirrel/bootmessage.nut"        // Source code: https://github.com/smittytone/generic-squirrel
 
 // Set up the disconnection manager
 disconnectionManager.eventCallback = discoHandler;
